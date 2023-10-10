@@ -1,7 +1,9 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
-// Copyright (C) 2017 Sanjay Madhav. All rights reserved.
+// Copyright (C) 2017 Sanjay Madhav. 
+// Copyright (C) 2023 Tomohiko Sakaguchi
 // 
+// All rights reserved.
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -32,10 +34,11 @@ void MoveComponent::Update(float deltaTime)
 		pos += mOwner->GetForward() * mForwardSpeed * deltaTime;
 
 		// Screen wrapping (for asteroids)
-		if (pos.x < -512.0f) { pos.x = 510.0f; }
-		else if (pos.x > 512.0f) { pos.x = -510.0f; }
-		if (pos.y < -384.0f) { pos.y = 382.0f; }
-		else if (pos.y > 384.0f) { pos.y = -382.0f; }
+		if (pos.x < -512.0f) { pos.x = -512.0f; }
+		else if (pos.x > 512.0f) { pos.x = 512.0f; }
+		if (pos.y < -384.0f) { pos.y = -384.0f; }
+		else if (pos.y > 384.0f) { pos.y = 384.0f; }
+
 		mOwner->SetPosition(pos);
 	}
 }

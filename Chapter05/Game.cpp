@@ -1,7 +1,9 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
-// Copyright (C) 2017 Sanjay Madhav. All rights reserved.
+// Copyright (C) 2017 Sanjay Madhav. 
+// Copyright (C) 2023 Tomohiko Sakaguchi
 // 
+// All rights reserved.
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -16,6 +18,7 @@
 #include "SpriteComponent.h"
 #include "Actor.h"
 #include "Ship.h"
+#include "EnemyShip.h"
 #include "Asteroid.h"
 #include "Random.h"
 
@@ -245,12 +248,10 @@ void Game::LoadData()
 	mShip = new Ship(this);
 	mShip->SetRotation(Math::PiOver2);
 
-	// Create asteroids
-	const int numAsteroids = 20;
-	for (int i = 0; i < numAsteroids; i++)
-	{
-		new Asteroid(this);
-	}
+	// Create enemy's ship
+	mEnemyShip = new EnemyShip(this);
+	mEnemyShip->SetPosition(Vector2(256.0f, 200.0f));
+	mEnemyShip->SetRotation(Math::PiOver2 * -1);
 }
 
 void Game::UnloadData()

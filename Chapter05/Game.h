@@ -1,7 +1,9 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
-// Copyright (C) 2017 Sanjay Madhav. All rights reserved.
+// Copyright (C) 2017 Sanjay Madhav. 
+// Copyright (C) 2023 Tomohiko Sakaguchi
 // 
+// All rights reserved.
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -33,6 +35,10 @@ public:
 	void AddAsteroid(class Asteroid* ast);
 	void RemoveAsteroid(class Asteroid* ast);
 	std::vector<class Asteroid*>& GetAsteroids() { return mAsteroids; }
+	class Ship* GetPlayerShip() { return mShip; }
+	class EnemyShip* GetEnemyShip() { return mEnemyShip;}
+	void SetPlayerShip(class Ship* ship) { mShip = ship; }
+	void SetEnemyShip(class EnemyShip* enemyShip) { mEnemyShip = enemyShip; }
 private:
 	void ProcessInput();
 	void UpdateGame();
@@ -66,6 +72,7 @@ private:
 	bool mUpdatingActors;
 
 	// Game-specific
-	class Ship* mShip;
+	class Ship* mShip; // Player's ship
+	class EnemyShip* mEnemyShip;
 	std::vector<class Asteroid*> mAsteroids;
 };

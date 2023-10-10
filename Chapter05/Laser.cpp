@@ -1,7 +1,9 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
-// Copyright (C) 2017 Sanjay Madhav. All rights reserved.
+// Copyright (C) 2017 Sanjay Madhav. 
+// Copyright (C) 2023 Tomohiko Sakaguchi
 // 
+// All rights reserved.
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -12,6 +14,8 @@
 #include "Game.h"
 #include "CircleComponent.h"
 #include "Asteroid.h"
+#include "Ship.h"
+#include "EnemyShip.h"
 
 Laser::Laser(Game* game)
 	:Actor(game)
@@ -30,11 +34,21 @@ Laser::Laser(Game* game)
 	mCircle->SetRadius(11.0f);
 }
 
+bool Laser::IsOutFrame()
+{
+	if ((GetPosition().x <= -512.0f) || (GetPosition().x >= 512.0f) || (GetPosition().y <= -384.0f) || (GetPosition().y >= 384.0f))
+	{
+		return true;
+	}
+
+	return false;
+}
+
 void Laser::UpdateActor(float deltaTime)
 {
 	// If we run out of time, laser is dead
 	mDeathTimer -= deltaTime;
-	if (mDeathTimer <= 0.0f)
+	if (mDeathTimer <= 0.0f || IsOutFrame())
 	{
 		SetState(EDead);
 	}
@@ -49,7 +63,45 @@ void Laser::UpdateActor(float deltaTime)
 				// set ourselves and the asteroid to dead
 				SetState(EDead);
 				ast->SetState(EDead);
-				break;
+				return;
+			}
+		}
+
+		class Ship* playerShip = GetGame()->GetPlayerShip();
+		if (playerShip != NULL)
+		{
+			if (playerShip->GetState() != EDead && playerShip->GetTeam() != GetTeam())
+			{
+				if (Intersect(*mCircle, *(playerShip->GetCircle())))
+				{
+					SetState(EDead);
+
+					playerShip->ReceiveDamage(50);
+					if (playerShip->GetHp() <= 0)
+					{
+						
+						playerShip->SetState(EDead);
+					}
+				}
+			}
+		}
+
+		class EnemyShip* enemyShip = GetGame()->GetEnemyShip();
+		if (enemyShip != NULL)
+		{
+			if (enemyShip->GetState() != EDead && enemyShip->GetTeam() != GetTeam())
+			{
+				if (Intersect(*mCircle, *(enemyShip->GetCircle())))
+				{
+					SetState(EDead);
+
+					enemyShip->ReceiveDamage(50);
+					if (enemyShip->GetHp() <= 0)
+					{
+						
+						enemyShip->SetState(EDead);
+					}
+				}
 			}
 		}
 	}

@@ -1,7 +1,9 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
-// Copyright (C) 2017 Sanjay Madhav. All rights reserved.
+// Copyright (C) 2017 Sanjay Madhav. 
+// Copyright (C) 2023 Tomohiko Sakaguchi
 // 
+// All rights reserved.
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -14,6 +16,12 @@
 class Actor
 {
 public:
+	enum Team
+	{
+		ENone = 0,
+		EPlayer,
+		EEnemy
+	};
 	enum State
 	{
 		EActive,
@@ -52,6 +60,9 @@ public:
 	State GetState() const { return mState; }
 	void SetState(State state) { mState = state; }
 
+	Team GetTeam() const { return mTeam; }
+	void SetTeam(Team team) { mTeam = team; }
+
 	class Game* GetGame() { return mGame; }
 
 
@@ -61,6 +72,7 @@ public:
 private:
 	// Actor's state
 	State mState;
+	Team mTeam;
 
 	// Transform
 	Matrix4 mWorldTransform;

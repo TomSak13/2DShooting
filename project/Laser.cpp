@@ -16,6 +16,7 @@
 #include "Asteroid.h"
 #include "Ship.h"
 #include "EnemyShip.h"
+#include "Renderer.h"
 
 Laser::Laser(Game* game)
 	:Actor(game)
@@ -23,7 +24,7 @@ Laser::Laser(Game* game)
 {
 	// Create a sprite component
 	SpriteComponent* sc = new SpriteComponent(this);
-	sc->SetTexture(game->GetTexture("Assets/Laser.png"));
+	sc->SetTexture(game->GetRenderer()->GetTexture("Assets/Laser.png"));
 
 	// Create a move component, and set a forward speed
 	MoveComponent* mc = new MoveComponent(this);

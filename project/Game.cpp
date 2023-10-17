@@ -21,10 +21,11 @@
 #include "EnemyShip.h"
 #include "Asteroid.h"
 #include "Random.h"
+#include "Renderer.h"
 
 Game::Game()
-:mWindow(nullptr)
-,mSpriteShader(nullptr)
+:mRenderer(nullptr)
+,mWindow(nullptr)
 ,mIsRunning(true)
 ,mUpdatingActors(false)
 {
@@ -39,54 +40,14 @@ bool Game::Initialize()
 		return false;
 	}
 	
-	// Set OpenGL attributes
-	// Use the core OpenGL profile
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	// Specify version 3.3
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-	// Request a color buffer with 8-bits per RGBA channel(RGBAを各8bitで表現する)
-	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-	// Enable double buffering(ダブルバッファを設定)
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	// Force OpenGL to use hardware acceleration(GPUを使用してレンダリングを行うことを示す)
-	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-	
-	mWindow = SDL_CreateWindow("Game Programming in C++ (Chapter 5)", 100, 100,
-							   1024, 768, SDL_WINDOW_OPENGL);
-	if (!mWindow)
+	mRenderer = new Renderer(this);
+	if (!mRenderer->Initialize(1024.0f, 768.0f))
 	{
-		SDL_Log("Failed to create window: %s", SDL_GetError());
+		SDL_Log("Failed to initialize renderer");
+		delete mRenderer;
+		mRenderer = nullptr;
 		return false;
 	}
-	
-	// Create an OpenGL context(コンテクストはOepnGLの全ての要素を管理するもの。管理用の構造体)
-	mContext = SDL_GL_CreateContext(mWindow);
-	
-	// Initialize GLEW
-	glewExperimental = GL_TRUE; // 一部のプラットフォームで出る初期化エラー対策
-	if (glewInit() != GLEW_OK) // 後方互換性を含む拡張システム(GLEW)を使用可能にする
-	{
-		SDL_Log("Failed to initialize GLEW.");
-		return false;
-	}
-	
-	// On some platforms, GLEW will emit a benign error code,
-	// so clear it
-	glGetError();
-	
-	// Make sure we can create/compile shaders
-	if (!LoadShaders())
-	{
-		SDL_Log("Failed to load shaders.");
-		return false;
-	}
-
-	// Create quad for drawing sprites
-	CreateSpriteVerts();
 
 	LoadData();
 
@@ -181,65 +142,7 @@ void Game::UpdateGame()
 
 void Game::GenerateOutput()
 {
-	// Set the clear color to grey
-	glClearColor(0.80f, 0.80f, 0.80f, 1.0f);
-	// Clear the color buffer
-	glClear(GL_COLOR_BUFFER_BIT);
-	
-	// Draw all sprite components
-	// Enable alpha blending on the color buffer
-	glEnable(GL_BLEND);          // カラーバッファのブレンディングを有効化
-	glBlendFunc(
-		GL_SRC_ALPHA,            // srcFactorをsrcAlpha
-		GL_ONE_MINUS_SRC_ALPHA   // dstFactorを1 - srcAlpha
-	);
-	
-	// Set shader/vao as active
-	mSpriteShader->SetActive();
-	mSpriteVerts->SetActive();
-	for (auto sprite : mSprites)
-	{
-		sprite->Draw(mSpriteShader);
-	}
-
-	// Swap the buffers
-	SDL_GL_SwapWindow(mWindow);
-}
-
-bool Game::LoadShaders()
-{
-	mSpriteShader = new Shader();
-	if (!mSpriteShader->Load("Shaders/Sprite.vert", "Shaders/Sprite.frag"))
-	{
-		return false;
-	}
-
-	mSpriteShader->SetActive();
-	// Set the view-projection matrix
-	Matrix4 viewProj = Matrix4::CreateSimpleViewProj(1024.f, 768.f);
-	mSpriteShader->SetMatrixUniform("uViewProj", viewProj);
-	return true;
-}
-
-void Game::CreateSpriteVerts()
-{
-	// 頂点座標にテクスチャ座標を追加して定義
-	// (x,y,z,u,v)の順に定義。
-	// x,y,z:頂点の座標
-	// u,v  :テクスチャ座標
-	float vertices[] = {
-		-0.5f,  0.5f, 0.f, 0.f, 0.f, // top left(x,y,z,u,v)
-		 0.5f,  0.5f, 0.f, 1.f, 0.f, // top right
-		 0.5f, -0.5f, 0.f, 1.f, 1.f, // bottom right
-		-0.5f, -0.5f, 0.f, 0.f, 1.f  // bottom left
-	};
-
-	unsigned int indices[] = {
-		0, 1, 2,
-		2, 3, 0
-	};
-
-	mSpriteVerts = new VertexArray(vertices, 4, indices, 6);
+	mRenderer->Draw();
 }
 
 void Game::LoadData()
@@ -263,37 +166,10 @@ void Game::UnloadData()
 		delete mActors.back();
 	}
 
-	// Destroy textures
-	for (auto i : mTextures)
+	if (mRenderer)
 	{
-		i.second->Unload();
-		delete i.second;
+		mRenderer->UnloadData();
 	}
-	mTextures.clear();
-}
-
-Texture* Game::GetTexture(const std::string& fileName)
-{
-	Texture* tex = nullptr;
-	auto iter = mTextures.find(fileName);
-	if (iter != mTextures.end())
-	{
-		tex = iter->second;
-	}
-	else
-	{
-		tex = new Texture();
-		if (tex->Load(fileName))
-		{
-			mTextures.emplace(fileName, tex);
-		}
-		else
-		{
-			delete tex;
-			tex = nullptr;
-		}
-	}
-	return tex;
 }
 
 void Game::AddAsteroid(Asteroid* ast)
@@ -314,11 +190,13 @@ void Game::RemoveAsteroid(Asteroid* ast)
 void Game::Shutdown()
 {
 	UnloadData();
-	delete mSpriteVerts;
-	mSpriteShader->Unload();
-	delete mSpriteShader;
-	SDL_GL_DeleteContext(mContext);
-	SDL_DestroyWindow(mWindow);
+
+	if (mRenderer)
+	{
+		mRenderer->Shutdown();
+		delete mRenderer;
+	}
+
 	SDL_Quit();
 }
 
@@ -354,30 +232,4 @@ void Game::RemoveActor(Actor* actor)
 		std::iter_swap(iter, mActors.end() - 1);
 		mActors.pop_back();
 	}
-}
-
-void Game::AddSprite(SpriteComponent* sprite)
-{
-	// Find the insertion point in the sorted vector
-	// (The first element with a higher draw order than me)
-	int myDrawOrder = sprite->GetDrawOrder();
-	auto iter = mSprites.begin();
-	for (;
-		iter != mSprites.end();
-		++iter)
-	{
-		if (myDrawOrder < (*iter)->GetDrawOrder())
-		{
-			break;
-		}
-	}
-
-	// Inserts element before position of iterator
-	mSprites.insert(iter, sprite);
-}
-
-void Game::RemoveSprite(SpriteComponent* sprite)
-{
-	auto iter = std::find(mSprites.begin(), mSprites.end(), sprite);
-	mSprites.erase(iter);
 }

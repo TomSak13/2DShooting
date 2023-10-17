@@ -207,11 +207,15 @@ bool Renderer::LoadShaders()
 
 void Renderer::CreateSpriteVerts()
 {
+	// 頂点座標にテクスチャ座標を追加して定義
+	// (x,y,z,u,v)の順に定義。
+	// x,y,z:頂点の座標
+	// u,v  :テクスチャ座標
 	float vertices[] = {
-		-0.5f, 0.5f, 0.f, 0.f, 0.f, 0.0f, 0.f, 0.f, // top left
-		0.5f, 0.5f, 0.f, 0.f, 0.f, 0.0f, 1.f, 0.f, // top right
-		0.5f,-0.5f, 0.f, 0.f, 0.f, 0.0f, 1.f, 1.f, // bottom right
-		-0.5f,-0.5f, 0.f, 0.f, 0.f, 0.0f, 0.f, 1.f  // bottom left
+		-0.5f,  0.5f, 0.f, 0.f, 0.f, // top left(x,y,z,u,v)
+		 0.5f,  0.5f, 0.f, 1.f, 0.f, // top right
+		 0.5f, -0.5f, 0.f, 1.f, 1.f, // bottom right
+		-0.5f, -0.5f, 0.f, 0.f, 1.f  // bottom left
 	};
 
 	unsigned int indices[] = {

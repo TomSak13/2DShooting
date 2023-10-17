@@ -14,6 +14,7 @@
 #include "InputComponent.h"
 #include "Game.h"
 #include "Laser.h"
+#include "Renderer.h"
 
 EnemyShip::EnemyShip(Game* game)
 	:Actor(game)
@@ -22,7 +23,7 @@ EnemyShip::EnemyShip(Game* game)
 {
 	// Create a sprite component
 	SpriteComponent* sc = new SpriteComponent(this, 150);
-	sc->SetTexture(game->GetTexture("Assets/Ship.png"));
+	sc->SetTexture(game->GetRenderer()->GetTexture("Assets/Ship.png"));
 
 	// Create a move component
 	MoveComponent* mc = new MoveComponent(this);

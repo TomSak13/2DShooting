@@ -18,6 +18,13 @@
 class Game
 {
 public:
+	enum GameState
+	{
+		EGameplay,
+		EPaused,
+		EQuit
+	};
+
 	Game();
 	bool Initialize();
 	void RunLoop();
@@ -27,6 +34,9 @@ public:
 	void RemoveActor(class Actor* actor);
 	
 	class Renderer* GetRenderer() const { return mRenderer; }
+
+	GameState GetState() const { return mGameState; }
+	void SetState(GameState state) { mGameState = state; }
 	
 	// Game-specific (add/remove asteroid)
 	void AddAsteroid(class Asteroid* ast);
@@ -36,6 +46,11 @@ public:
 	class EnemyShip* GetEnemyShip() { return mEnemyShip;}
 	void SetPlayerShip(class Ship* ship) { mShip = ship; }
 	void SetEnemyShip(class EnemyShip* enemyShip) { mEnemyShip = enemyShip; }
+
+	class Font* GetFont(const std::string& fileName);
+	const std::vector<class UIScreen*>& GetUIStack() { return mUIStack; }
+	void PushUI(class UIScreen* screen);
+
 private:
 	void ProcessInput();
 	void UpdateGame();
@@ -54,7 +69,9 @@ private:
 	SDL_Window* mWindow;
 	SDL_GLContext mContext;
 	Uint32 mTicksCount;
-	bool mIsRunning;
+
+	GameState mGameState;
+
 	// Track if we're updating actors right now
 	bool mUpdatingActors;
 
@@ -62,4 +79,7 @@ private:
 	class Ship* mShip; // Player's ship
 	class EnemyShip* mEnemyShip;
 	std::vector<class Asteroid*> mAsteroids;
+
+	std::unordered_map<std::string, class Font*> mFonts;
+	std::vector<class UIScreen*> mUIStack;
 };

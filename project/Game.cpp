@@ -15,6 +15,7 @@
 #include "Shader.h"
 #include <algorithm>
 #include "Actor.h"
+#include "UIScreen.h"
 #include "SpriteComponent.h"
 #include "Actor.h"
 #include "Ship.h"
@@ -22,11 +23,13 @@
 #include "Asteroid.h"
 #include "Random.h"
 #include "Renderer.h"
+#include "Font.h"
+#include "PauseMenu.h"
 
 Game::Game()
 :mRenderer(nullptr)
 ,mWindow(nullptr)
-,mIsRunning(true)
+,mGameState(EGameplay)
 ,mUpdatingActors(false)
 {
 	
@@ -37,6 +40,12 @@ bool Game::Initialize()
 	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO) != 0)
 	{
 		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
+		return false;
+	}
+
+	if (TTF_Init() != 0)
+	{
+		SDL_Log("Failed to initialize SDL_ttf.");
 		return false;
 	}
 	
@@ -58,7 +67,7 @@ bool Game::Initialize()
 
 void Game::RunLoop()
 {
-	while (mIsRunning)
+	while (mGameState != EQuit)
 	{
 		ProcessInput();
 		UpdateGame();
@@ -74,7 +83,7 @@ void Game::ProcessInput()
 		switch (event.type)
 		{
 			case SDL_QUIT:
-				mIsRunning = false;
+				mGameState = EQuit;
 				break;
 		}
 	}
@@ -82,7 +91,11 @@ void Game::ProcessInput()
 	const Uint8* keyState = SDL_GetKeyboardState(NULL);
 	if (keyState[SDL_SCANCODE_ESCAPE])
 	{
-		mIsRunning = false;
+		mGameState = EQuit;
+	}
+	else if (keyState[SDL_SCANCODE_Q])
+	{
+		new PauseMenu(this);
 	}
 
 	mUpdatingActors = true;
@@ -138,6 +151,29 @@ void Game::UpdateGame()
 	{
 		delete actor;
 	}
+
+	// Update UI screens(スタックされたUIを更新)
+	for (auto ui : mUIStack)
+	{
+		if (ui->GetState() == UIScreen::EActive)
+		{
+			ui->Update(deltaTime);
+		}
+	}
+	// Delete any UIScreens that are closed
+	auto iter = mUIStack.begin();
+	while (iter != mUIStack.end())
+	{
+		if ((*iter)->GetState() == UIScreen::EClosing)
+		{
+			delete* iter;
+			iter = mUIStack.erase(iter);
+		}
+		else
+		{
+			++iter;
+		}
+	}
 }
 
 void Game::GenerateOutput()
@@ -164,6 +200,13 @@ void Game::UnloadData()
 	while (!mActors.empty())
 	{
 		delete mActors.back();
+	}
+
+	// Clear the UI stack
+	while (!mUIStack.empty())
+	{
+		delete mUIStack.back();
+		mUIStack.pop_back();
 	}
 
 	if (mRenderer)
@@ -231,5 +274,34 @@ void Game::RemoveActor(Actor* actor)
 		// Swap to end of vector and pop off (avoid erase copies)
 		std::iter_swap(iter, mActors.end() - 1);
 		mActors.pop_back();
+	}
+}
+
+void Game::PushUI(UIScreen* screen)
+{
+	mUIStack.emplace_back(screen);
+}
+
+Font* Game::GetFont(const std::string& fileName)
+{
+	auto iter = mFonts.find(fileName);
+	if (iter != mFonts.end())
+	{
+		return iter->second;
+	}
+	else
+	{
+		Font* font = new Font(this);
+		if (font->Load(fileName))
+		{
+			mFonts.emplace(fileName, font);
+		}
+		else
+		{
+			font->Unload();
+			delete font;
+			font = nullptr;
+		}
+		return font;
 	}
 }

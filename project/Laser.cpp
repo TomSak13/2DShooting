@@ -77,7 +77,7 @@ void Laser::UpdateActor(float deltaTime)
 				{
 					SetState(EDead);
 
-					playerShip->ReceiveDamage(50);
+					playerShip->ReceiveDamage(1);
 					if (playerShip->GetHp() <= 0)
 					{
 						

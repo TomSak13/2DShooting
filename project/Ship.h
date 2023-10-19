@@ -13,7 +13,7 @@
 class Ship : public Actor
 {
 public:
-	const int MaxHp = 100;
+	const int MaxHp = 3;
 
 	Ship(class Game* game);
 	Ship::~Ship();

@@ -64,7 +64,7 @@ private:
 	std::vector<class Actor*> mPendingActors;
 
 	class Renderer* mRenderer;
-
+	class HUD* mHUD;
 
 	SDL_Window* mWindow;
 	SDL_GLContext mContext;

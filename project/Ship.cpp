@@ -49,7 +49,11 @@ Ship::~Ship()
 
 void Ship::ReceiveDamage(int damage)
 {
-	mHp -= damage;
+	for (int i = 0; i < damage; i++)
+	{
+		mHp--;
+	}
+
 	if (mHp <= 0)
 	{
 		mHp = 0;

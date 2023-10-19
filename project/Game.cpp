@@ -25,6 +25,7 @@
 #include "Renderer.h"
 #include "Font.h"
 #include "PauseMenu.h"
+#include "HUD.h"
 
 Game::Game()
 :mRenderer(nullptr)
@@ -223,6 +224,9 @@ void Game::LoadData()
 	mEnemyShip = new EnemyShip(this);
 	mEnemyShip->SetPosition(Vector2(256.0f, 200.0f));
 	mEnemyShip->SetRotation(Math::PiOver2 * -1);
+
+	// UI elements
+	mHUD = new HUD(this);
 }
 
 void Game::UnloadData()

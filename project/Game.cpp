@@ -85,25 +85,57 @@ void Game::ProcessInput()
 			case SDL_QUIT:
 				mGameState = EQuit;
 				break;
+			case SDL_KEYDOWN:
+				if (!event.key.repeat)
+				{
+					// UI‚É“ü—Í‚ğ“n‚·‚©AƒQ[ƒ€“à‚É“ü—Í‚ğ“n‚·‚©‚ğƒXƒe[ƒg‚Å”»’f
+					if (mGameState == EGameplay)
+					{
+						//HandleKeyPress(event.key.keysym.sym);
+						if (event.key.keysym.sym == SDLK_ESCAPE)
+						{
+							new PauseMenu(this);
+						}
+					}
+					else if (!mUIStack.empty())
+					{
+						mUIStack.back()->
+							HandleKeyPress(event.key.keysym.sym);
+					}
+				}
+				break;
+			case SDL_MOUSEBUTTONDOWN:
+				if (mGameState == EGameplay)
+				{
+					//HandleKeyPress(event.button.button);
+				}
+				else if (!mUIStack.empty())
+				{
+					mUIStack.back()->
+						HandleKeyPress(event.button.button);
+				}
+				break;
+			default:
+				break;
 		}
 	}
 	
 	const Uint8* keyState = SDL_GetKeyboardState(NULL);
-	if (keyState[SDL_SCANCODE_ESCAPE])
-	{
-		mGameState = EQuit;
-	}
-	else if (keyState[SDL_SCANCODE_Q])
-	{
-		new PauseMenu(this);
-	}
+	
 
-	mUpdatingActors = true;
-	for (auto actor : mActors)
+	if (mGameState == EGameplay)
 	{
-		actor->ProcessInput(keyState);
+		mUpdatingActors = true;
+		for (auto actor : mActors)
+		{
+			actor->ProcessInput(keyState);
+		}
+		mUpdatingActors = false;
 	}
-	mUpdatingActors = false;
+	else if(!mUIStack.empty())
+	{
+		mUIStack.back()->ProcessInput(keyState); // Åã‘w‚É“ü—Í‚ğ“n‚·
+	}
 }
 
 void Game::UpdateGame()

@@ -24,13 +24,14 @@
 #include "Random.h"
 #include "Renderer.h"
 #include "Font.h"
+#include "TitleMenu.h"
 #include "PauseMenu.h"
 #include "HUD.h"
 
 Game::Game()
 :mRenderer(nullptr)
 ,mWindow(nullptr)
-,mGameState(EGameplay)
+,mGameState(EStart)
 ,mUpdatingActors(false)
 {
 	
@@ -153,36 +154,39 @@ void Game::UpdateGame()
 	}
 	mTicksCount = SDL_GetTicks();
 
-	// Update all actors
-	mUpdatingActors = true;
-	for (auto actor : mActors)
+	if (mGameState == EGameplay)
 	{
-		actor->Update(deltaTime);
-	}
-	mUpdatingActors = false;
-
-	// Move any pending actors to mActors
-	for (auto pending : mPendingActors)
-	{
-		pending->ComputeWorldTransform();
-		mActors.emplace_back(pending);
-	}
-	mPendingActors.clear();
-
-	// Add any dead actors to a temp vector
-	std::vector<Actor*> deadActors;
-	for (auto actor : mActors)
-	{
-		if (actor->GetState() == Actor::EDead)
+		// Update all actors
+		mUpdatingActors = true;
+		for (auto actor : mActors)
 		{
-			deadActors.emplace_back(actor);
+			actor->Update(deltaTime);
 		}
-	}
+		mUpdatingActors = false;
 
-	// Delete dead actors (which removes them from mActors)
-	for (auto actor : deadActors)
-	{
-		delete actor;
+		// Move any pending actors to mActors
+		for (auto pending : mPendingActors)
+		{
+			pending->ComputeWorldTransform();
+			mActors.emplace_back(pending);
+		}
+		mPendingActors.clear();
+
+		// Add any dead actors to a temp vector
+		std::vector<Actor*> deadActors;
+		for (auto actor : mActors)
+		{
+			if (actor->GetState() == Actor::EDead)
+			{
+				deadActors.emplace_back(actor);
+			}
+		}
+
+		// Delete dead actors (which removes them from mActors)
+		for (auto actor : deadActors)
+		{
+			delete actor;
+		}
 	}
 
 	// Update UI screens(スタックされたUIを更新)
@@ -227,6 +231,9 @@ void Game::LoadData()
 
 	// UI elements
 	mHUD = new HUD(this);
+
+	// Title Menu
+	new TitleMenu(this);
 }
 
 void Game::UnloadData()

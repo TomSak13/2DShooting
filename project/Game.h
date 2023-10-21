@@ -20,6 +20,7 @@ class Game
 public:
 	enum GameState
 	{
+		EStart,
 		EGameplay,
 		EPaused,
 		EQuit

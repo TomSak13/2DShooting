@@ -27,6 +27,7 @@
 #include "TitleMenu.h"
 #include "PauseMenu.h"
 #include "HUD.h"
+#include "BGSpriteComponent.h"
 
 Game::Game()
 :mRenderer(nullptr)
@@ -218,6 +219,24 @@ void Game::GenerateOutput()
 	mRenderer->Draw();
 }
 
+void Game::CreateBackGround()
+{
+	// ”wŒi—pƒAƒNƒ^[
+	Actor* bgActor = new Actor(this);
+	bgActor->SetPosition(Vector2(0, 0));
+	// ”wŒi‚»‚Ì1
+	BGSpriteComponent* bgsc = new BGSpriteComponent(bgActor);
+	bgsc->SetBGTextures(std::vector<Texture*>{
+		mRenderer->GetTexture("Assets/Farback01.png")});
+
+	// ”wŒi‚»‚Ì2
+	BGSpriteComponent* bgsc2 = new BGSpriteComponent(bgActor, 50);
+	bgsc2->SetBGTextures(std::vector<Texture*>{
+		mRenderer->GetTexture("Assets/Stars.png"),
+			mRenderer->GetTexture("Assets/Stars.png")});
+	bgsc2->SetScrollSpeed(-200.0f);
+}
+
 void Game::LoadData()
 {
 	// Create player's ship
@@ -228,6 +247,8 @@ void Game::LoadData()
 	mEnemyShip = new EnemyShip(this);
 	mEnemyShip->SetPosition(Vector2(256.0f, 200.0f));
 	mEnemyShip->SetRotation(Math::PiOver2 * -1);
+
+	CreateBackGround();
 
 	// UI elements
 	mHUD = new HUD(this);

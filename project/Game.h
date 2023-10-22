@@ -58,6 +58,7 @@ private:
 	void GenerateOutput();
 	void LoadData();
 	void UnloadData();
+	void CreateBackGround();
 
 	// All the actors in the game
 	std::vector<class Actor*> mActors;

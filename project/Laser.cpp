@@ -35,16 +35,6 @@ Laser::Laser(Game* game)
 	mCircle->SetRadius(11.0f);
 }
 
-bool Laser::IsOutFrame()
-{
-	if ((GetPosition().x <= -512.0f) || (GetPosition().x >= 512.0f) || (GetPosition().y <= -384.0f) || (GetPosition().y >= 384.0f))
-	{
-		return true;
-	}
-
-	return false;
-}
-
 void Laser::UpdateActor(float deltaTime)
 {
 	// If we run out of time, laser is dead
@@ -62,9 +52,12 @@ void Laser::UpdateActor(float deltaTime)
 			{
 				// The first asteroid we intersect with,
 				// set ourselves and the asteroid to dead
-				SetState(EDead);
-				ast->SetState(EDead);
-				return;
+				if (GetTeam() == EPlayer)
+				{
+					SetState(EDead);
+					ast->SetState(EDead);
+					return;
+				}
 			}
 		}
 

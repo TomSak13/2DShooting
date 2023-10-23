@@ -12,18 +12,15 @@
 #include "Game.h"
 #include "Random.h"
 #include "CircleComponent.h"
+#include "Ship.h"
 #include "Renderer.h"
 
 Asteroid::Asteroid(Game* game)
 	:Actor(game)
 	,mCircle(nullptr)
 {
-	// Initialize to random position/orientation
-	Vector2 randPos = Random::GetVector(Vector2(-512.0f, -384.0f),
-		Vector2(512.0f, 384.0f));
-	SetPosition(randPos);
 
-	SetRotation(Random::GetFloatRange(0.0f, Math::TwoPi));
+	SetRotation(Math::PiOver2 * -1);
 
 	// Create a sprite component
 	SpriteComponent* sc = new SpriteComponent(this);
@@ -35,7 +32,7 @@ Asteroid::Asteroid(Game* game)
 
 	// Create a circle component (for collision)
 	mCircle = new CircleComponent(this);
-	mCircle->SetRadius(40.0f);
+	mCircle->SetRadius(35.0f);
 
 	// Add to mAsteroids in game
 	game->AddAsteroid(this);
@@ -44,4 +41,31 @@ Asteroid::Asteroid(Game* game)
 Asteroid::~Asteroid()
 {
 	GetGame()->RemoveAsteroid(this);
+}
+
+void Asteroid::UpdateActor(float deltaTime)
+{
+	if (IsOutFrame())
+	{
+		SetState(EDead);
+	}
+
+	class Ship* playerShip = GetGame()->GetPlayerShip();
+	if (playerShip != NULL)
+	{
+		if (playerShip->GetState() != EDead && playerShip->GetTeam() != GetTeam())
+		{
+			if (Intersect(*mCircle, *(playerShip->GetCircle())))
+			{
+				SetState(EDead);
+
+				playerShip->ReceiveDamage(1);
+				if (playerShip->GetHp() <= 0)
+				{
+
+					playerShip->SetState(EDead);
+				}
+			}
+		}
+	}
 }

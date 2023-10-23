@@ -17,7 +17,6 @@ public:
 
 	void UpdateActor(float deltaTime) override;
 
-	bool IsOutFrame();
 private:
 	class CircleComponent* mCircle;
 	float mDeathTimer;

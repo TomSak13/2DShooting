@@ -15,6 +15,9 @@
 #include <vector>
 #include "Math.h"
 
+#define FIELD_WIDTH (512.0f)
+#define FIELD_LENGTH (384.0f)
+
 class Game
 {
 public:

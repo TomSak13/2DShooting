@@ -69,6 +69,8 @@ public:
 	// Add/remove components
 	void AddComponent(class Component* component);
 	void RemoveComponent(class Component* component);
+
+	bool IsOutFrame();
 private:
 	// Actor's state
 	State mState;

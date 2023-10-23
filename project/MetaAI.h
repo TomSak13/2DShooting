@@ -25,5 +25,5 @@ public:
 	void UpdateActor(float deltaTime) override;
 
 private:
-	int asteroidNum;
+	float mCreateAsteroidInterval;
 };

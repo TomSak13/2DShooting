@@ -245,11 +245,12 @@ void Game::LoadData()
 {
 	// Create player's ship
 	mShip = new Ship(this);
+	mShip->SetPosition(Vector2(0.0f,-300.0f));
 	mShip->SetRotation(Math::PiOver2);
 
 	// Create enemy's ship
 	mEnemyShip = new EnemyShip(this);
-	mEnemyShip->SetPosition(Vector2(256.0f, 200.0f));
+	mEnemyShip->SetPosition(Vector2(0.0f, 300.0f));
 	mEnemyShip->SetRotation(Math::PiOver2 * -1);
 
 	// Create MetaAI

@@ -82,6 +82,9 @@
     <ClCompile Include="BGSpriteComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MetaAI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h">
@@ -151,6 +154,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="BGSpriteComponent.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MetaAI.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

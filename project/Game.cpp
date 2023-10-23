@@ -10,19 +10,22 @@
 
 #include "Game.h"
 #include <GL/glew.h>
-#include "Texture.h"
-#include "VertexArray.h"
-#include "Shader.h"
 #include <algorithm>
-#include "Actor.h"
-#include "UIScreen.h"
-#include "SpriteComponent.h"
+#include "Random.h"
+
+#include "MetaAI.h"
 #include "Actor.h"
 #include "Ship.h"
 #include "EnemyShip.h"
 #include "Asteroid.h"
-#include "Random.h"
+
+#include "SpriteComponent.h"
 #include "Renderer.h"
+#include "Texture.h"
+#include "VertexArray.h"
+#include "Shader.h"
+
+#include "UIScreen.h"
 #include "Font.h"
 #include "TitleMenu.h"
 #include "PauseMenu.h"
@@ -32,6 +35,7 @@
 Game::Game()
 :mRenderer(nullptr)
 ,mWindow(nullptr)
+,mMetaAI(nullptr)
 ,mGameState(EStart)
 ,mUpdatingActors(false)
 {
@@ -247,6 +251,10 @@ void Game::LoadData()
 	mEnemyShip = new EnemyShip(this);
 	mEnemyShip->SetPosition(Vector2(256.0f, 200.0f));
 	mEnemyShip->SetRotation(Math::PiOver2 * -1);
+
+	// Create MetaAI
+	mMetaAI = new MetaAI(this);
+	mMetaAI->Initialize();
 
 	CreateBackGround();
 

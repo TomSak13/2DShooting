@@ -52,11 +52,6 @@ void EnemyShip::ReceiveDamage(int damage)
 
 void EnemyShip::UpdateActor(float deltaTime)
 {
-	mLaserCooldown -= deltaTime;
-}
-
-void EnemyShip::ActorInput(const uint8_t* keyState)
-{
 	if (mLaserCooldown <= 0.0f)
 	{
 		// Create a laser and set its position/rotation to mine
@@ -68,4 +63,6 @@ void EnemyShip::ActorInput(const uint8_t* keyState)
 		// Reset laser cooldown (half second) レーザーのインターバル時間
 		mLaserCooldown = 3.0f;
 	}
+
+	mLaserCooldown -= deltaTime;
 }

@@ -78,6 +78,7 @@ private:
 	bool mUpdatingActors;
 
 	// Game-specific
+	class MetaAI* mMetaAI;
 	class Ship* mShip; // Player's ship
 	class EnemyShip* mEnemyShip;
 	std::vector<class Asteroid*> mAsteroids;

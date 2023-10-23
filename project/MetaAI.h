@@ -1,6 +1,4 @@
 // ----------------------------------------------------------------
-// From Game Programming in C++ by Sanjay Madhav
-// Copyright (C) 2017 Sanjay Madhav. 
 // Copyright (C) 2023 Tomohiko Sakaguchi
 // 
 // All rights reserved.
@@ -9,23 +7,23 @@
 // ----------------------------------------------------------------
 
 #pragma once
+#include <vector>
+#include "Math.h"
 #include "Actor.h"
-class EnemyShip : public Actor
+#include <cstdint>
+
+class MetaAI : public Actor
 {
 public:
-	const int MaxHp = 100;
+	const int MaxAsteroidNum = 20;
 
-	EnemyShip(class Game* game);
-	EnemyShip::~EnemyShip();
+	MetaAI(Game* game);
+	MetaAI::~MetaAI();
+
+	void Initialize();
 
 	void UpdateActor(float deltaTime) override;
 
-	class CircleComponent* GetCircle() { return mCircle;}
-	int GetHp() { return mHp; }
-	void ReceiveDamage(int damage);
 private:
-	float mLaserCooldown;
-
-	class CircleComponent* mCircle;
-	int mHp;
+	int asteroidNum;
 };

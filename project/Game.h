@@ -49,12 +49,15 @@ public:
 	class Ship* GetPlayerShip() { return mShip; }
 	class EnemyShip* GetEnemyShip() { return mEnemyShip;}
 	void SetPlayerShip(class Ship* ship) { mShip = ship; }
+	void CreateEnemyShip();
 	void SetEnemyShip(class EnemyShip* enemyShip) { mEnemyShip = enemyShip; }
 
 	class Font* GetFont(const std::string& fileName);
 	const std::vector<class UIScreen*>& GetUIStack() { return mUIStack; }
 	void PushUI(class UIScreen* screen);
 
+	void IncrementPlayerDestroyAsteroid() { mPlayerDestroyAsteroid++; }
+	int GetPlayerDestroyAsteroid() { return mPlayerDestroyAsteroid; }
 private:
 	void ProcessInput();
 	void UpdateGame();
@@ -88,4 +91,6 @@ private:
 
 	std::unordered_map<std::string, class Font*> mFonts;
 	std::vector<class UIScreen*> mUIStack;
+
+	int mPlayerDestroyAsteroid;
 };

@@ -54,6 +54,7 @@ void Laser::UpdateActor(float deltaTime)
 				// set ourselves and the asteroid to dead
 				if (GetTeam() == EPlayer)
 				{
+					GetGame()->IncrementPlayerDestroyAsteroid();
 					SetState(EDead);
 					ast->SetState(EDead);
 					return;

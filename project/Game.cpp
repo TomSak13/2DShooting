@@ -38,6 +38,7 @@ Game::Game()
 ,mMetaAI(nullptr)
 ,mGameState(EStart)
 ,mUpdatingActors(false)
+,mPlayerDestroyAsteroid(0)
 {
 	
 }
@@ -248,10 +249,7 @@ void Game::LoadData()
 	mShip->SetPosition(Vector2(0.0f,-300.0f));
 	mShip->SetRotation(Math::PiOver2);
 
-	// Create enemy's ship
-	mEnemyShip = new EnemyShip(this);
-	mEnemyShip->SetPosition(Vector2(0.0f, 300.0f));
-	mEnemyShip->SetRotation(Math::PiOver2 * -1);
+	
 
 	// Create MetaAI
 	mMetaAI = new MetaAI(this);
@@ -301,6 +299,14 @@ void Game::RemoveAsteroid(Asteroid* ast)
 	{
 		mAsteroids.erase(iter);
 	}
+}
+
+void Game::CreateEnemyShip()
+{
+	// Create enemy's ship
+	mEnemyShip = new EnemyShip(this);
+	mEnemyShip->SetPosition(Vector2(0.0f, FIELD_LENGTH));
+	mEnemyShip->SetRotation(Math::PiOver2 * -1);
 }
 
 void Game::Shutdown()

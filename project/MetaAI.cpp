@@ -33,6 +33,13 @@ void MetaAI::UpdateActor(float deltaTime)
 {
 	std::vector<class Asteroid*> asteroidList = GetGame()->GetAsteroids();
 
+	/* create boss */
+	if (GetGame()->GetPlayerDestroyAsteroid() > 5 && GetGame()->GetEnemyShip() == NULL)
+	{
+		GetGame()->CreateEnemyShip();
+	}
+
+	/* create asteroid */
 	if (asteroidList.size() >= MaxAsteroidNum)
 	{
 		return;
@@ -52,6 +59,5 @@ void MetaAI::UpdateActor(float deltaTime)
 
 	Vector2 randPos = Random::GetVector(Vector2(FIELD_WIDTH * -1, FIELD_LENGTH),
 		Vector2(FIELD_WIDTH, FIELD_LENGTH));
-	asteroid->SetPosition(randPos);
-	
+	asteroid->SetPosition(randPos);	
 }

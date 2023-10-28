@@ -34,7 +34,8 @@ void MetaAI::UpdateActor(float deltaTime)
 	std::vector<class Asteroid*> asteroidList = GetGame()->GetAsteroids();
 
 	/* create boss */
-	if (GetGame()->GetPlayerDestroyAsteroid() > 5 && GetGame()->GetEnemyShip() == NULL)
+	if (GetGame()->GetPlayerDestroyAsteroid() > 0 && GetGame()->GetPlayerDestroyAsteroid() % 5 == 0  
+		&& GetGame()->GetEnemyShip() == NULL)
 	{
 		GetGame()->CreateEnemyShip();
 	}

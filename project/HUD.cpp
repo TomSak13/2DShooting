@@ -11,6 +11,7 @@
 #include "Game.h"
 #include "Renderer.h"
 #include "Ship.h"
+#include "Font.h"
 #include <algorithm>
 
 HUD::HUD(Game* game)
@@ -19,6 +20,7 @@ HUD::HUD(Game* game)
 	Renderer* r = mGame->GetRenderer();
 	
 	mHpTex = r->GetTexture("Assets/Blip.png");
+	mHpText = mFont->RenderText("HP", Color::Red, 24);
 }
 
 HUD::~HUD()
@@ -39,17 +41,32 @@ void HUD::Update(float deltaTime)
 	mHp.clear();
 	for (int i = 0; i < playerHp; i++)
 	{
-		Vector2 hpMarkerPos(static_cast<float>(-500 + (i+1)*50), 350);
+		Vector2 hpMarkerPos(static_cast<float>(-475 + (i+1)*50), 350);
 		mHp.push_back(hpMarkerPos);
 	}
+
+	char scoreText[64];
+	int score = mGame->GetPlayerDestroyAsteroid() + (5 * mGame->GetPlayerDestroyShip());
+	sprintf_s(scoreText, "SCORE    %04d",score);
+	mScore = mFont->RenderText(scoreText, Color::White, 24);
 }
 
 void HUD::Draw(Shader* shader)
 {
 	// Blips
-	for (Vector2& blip : mHp)
+	DrawTexture(shader, mHpText, Vector2(-475.0f, 350.0f), 1.0f);
+	if (mHpTex != NULL)
 	{
-		DrawTexture(shader, mHpTex, blip, 1.0f);
+		for (Vector2& blip : mHp)
+		{
+			DrawTexture(shader, mHpTex, blip, 1.0f);
+		}
+	}
+
+	// Score
+	if (mScore != NULL)
+	{
+		DrawTexture(shader, mScore, Vector2(350.0f,350.0f),1.0F);
 	}
 }
 

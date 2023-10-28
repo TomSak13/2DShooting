@@ -36,18 +36,18 @@ public:
 
 	void AddActor(class Actor* actor);
 	void RemoveActor(class Actor* actor);
-	
+
 	class Renderer* GetRenderer() const { return mRenderer; }
 
 	GameState GetState() const { return mGameState; }
 	void SetState(GameState state) { mGameState = state; }
-	
+
 	// Game-specific (add/remove asteroid)
 	void AddAsteroid(class Asteroid* ast);
 	void RemoveAsteroid(class Asteroid* ast);
 	std::vector<class Asteroid*>& GetAsteroids() { return mAsteroids; }
 	class Ship* GetPlayerShip() { return mShip; }
-	class EnemyShip* GetEnemyShip() { return mEnemyShip;}
+	class EnemyShip* GetEnemyShip() { return mEnemyShip; }
 	void SetPlayerShip(class Ship* ship) { mShip = ship; }
 	void CreateEnemyShip();
 	void SetEnemyShip(class EnemyShip* enemyShip) { mEnemyShip = enemyShip; }
@@ -58,6 +58,9 @@ public:
 
 	void IncrementPlayerDestroyAsteroid() { mPlayerDestroyAsteroid++; }
 	int GetPlayerDestroyAsteroid() { return mPlayerDestroyAsteroid; }
+
+	void IncrementPlayerDestroyShip() { mPlayerDestroyShip++; }
+	int GetPlayerDestroyShip() { return mPlayerDestroyShip; }
 private:
 	void ProcessInput();
 	void UpdateGame();
@@ -93,4 +96,5 @@ private:
 	std::vector<class UIScreen*> mUIStack;
 
 	int mPlayerDestroyAsteroid;
+	int mPlayerDestroyShip;
 };

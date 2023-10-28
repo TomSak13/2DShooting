@@ -39,6 +39,7 @@ EnemyShip::EnemyShip(Game* game)
 EnemyShip::~EnemyShip()
 {
 	GetGame()->SetEnemyShip(NULL);
+	GetGame()->IncrementPlayerDestroyShip();
 }
 
 void EnemyShip::ReceiveDamage(int damage)

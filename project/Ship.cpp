@@ -30,8 +30,12 @@ Ship::Ship(Game* game)
 	InputComponent* ic = new InputComponent(this);
 	ic->SetForwardKey(SDL_SCANCODE_W);
 	ic->SetBackKey(SDL_SCANCODE_S);
-	ic->SetClockwiseKey(SDL_SCANCODE_A);
-	ic->SetCounterClockwiseKey(SDL_SCANCODE_D);
+	ic->SetClockwiseKey(SDL_SCANCODE_LEFT);
+	ic->SetCounterClockwiseKey(SDL_SCANCODE_RIGHT);
+
+	ic->SetRightKey(SDL_SCANCODE_D);
+	ic->SetLeftKey(SDL_SCANCODE_A);
+
 	ic->SetMaxForwardSpeed(300.0f);
 	ic->SetMaxAngularSpeed(Math::TwoPi);
 

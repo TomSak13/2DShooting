@@ -22,6 +22,8 @@ public:
 protected:
 
 	class Texture* mHpTex;
+	class Texture* mHpText;
+	class Texture* mScore;
 	
 	std::vector<Vector2> mHp;
 };

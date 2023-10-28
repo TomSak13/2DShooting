@@ -39,6 +39,7 @@ Game::Game()
 ,mGameState(EStart)
 ,mUpdatingActors(false)
 ,mPlayerDestroyAsteroid(0)
+,mPlayerDestroyShip(0)
 {
 	
 }

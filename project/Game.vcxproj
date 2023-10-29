@@ -19,6 +19,7 @@
     <ClCompile Include="EnemyShip.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameOverMenu.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="Laser.cpp" />
@@ -46,6 +47,7 @@
     <ClInclude Include="EnemyShip.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameOverMenu.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="InputComponent.h" />
     <ClInclude Include="Laser.h" />

@@ -26,7 +26,8 @@ public:
 		EStart,
 		EGameplay,
 		EPaused,
-		EQuit
+		EQuit,
+		EReStart,
 	};
 
 	Game();

@@ -31,6 +31,7 @@
 #include "PauseMenu.h"
 #include "HUD.h"
 #include "BGSpriteComponent.h"
+#include "GameOverMenu.h"
 
 Game::Game()
 :mRenderer(nullptr)
@@ -194,6 +195,12 @@ void Game::UpdateGame()
 		{
 			delete actor;
 		}
+
+		// Player ship's dead check
+		if (mShip == NULL)
+		{
+			new GameOverMenu(this);
+		}
 	}
 
 	// Update UI screens(スタックされたUIを更新)
@@ -249,8 +256,6 @@ void Game::LoadData()
 	mShip = new Ship(this);
 	mShip->SetPosition(Vector2(0.0f,-300.0f));
 	mShip->SetRotation(Math::PiOver2);
-
-	
 
 	// Create MetaAI
 	mMetaAI = new MetaAI(this);

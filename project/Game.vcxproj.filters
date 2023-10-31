@@ -88,6 +88,12 @@
     <ClCompile Include="GameOverMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CollisionBroker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h">
@@ -163,6 +169,12 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="GameOverMenu.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionBroker.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

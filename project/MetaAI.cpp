@@ -41,7 +41,7 @@ void MetaAI::UpdateActor(float deltaTime)
 	}
 
 	/* create asteroid */
-	if (asteroidList.size() >= MaxAsteroidNum)
+	if ((int)asteroidList.size() >= MaxAsteroidNum)
 	{
 		return;
 	}

@@ -30,7 +30,7 @@ void BGSpriteComponent::Update(float deltaTime)
 		// the right of the last bg texture
 		if (bg.mOffset.y < -1.0f * bg.mTexture->GetHeight())
 		{
-			bg.mOffset.y = (mBGTextures.size() - 1) * bg.mTexture->GetHeight() - 1;
+			bg.mOffset.y = static_cast<float>((mBGTextures.size() - 1) * bg.mTexture->GetHeight() - 1);
 		}
 	}
 }
@@ -68,7 +68,7 @@ void BGSpriteComponent::SetBGTextures(const std::vector<Texture*>& textures)
 		temp.mTexture = tex;
 		// Each texture is screen width in offset
 		temp.mOffset.x = 0;
-		temp.mOffset.y = count * tex->GetHeight();
+		temp.mOffset.y = static_cast<float>(count * tex->GetHeight());
 		mBGTextures.emplace_back(temp);
 		count++;
 	}

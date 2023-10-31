@@ -27,7 +27,6 @@ public:
 		EGameplay,
 		EPaused,
 		EQuit,
-		EReStart,
 	};
 
 	Game();
@@ -78,8 +77,6 @@ private:
 	class Renderer* mRenderer;
 	class HUD* mHUD;
 
-	SDL_Window* mWindow;
-	SDL_GLContext mContext;
 	Uint32 mTicksCount;
 
 	GameState mGameState;

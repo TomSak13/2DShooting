@@ -35,7 +35,6 @@
 
 Game::Game()
 :mRenderer(nullptr)
-,mWindow(nullptr)
 ,mMetaAI(nullptr)
 ,mGameState(EStart)
 ,mUpdatingActors(false)

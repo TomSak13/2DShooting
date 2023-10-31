@@ -10,23 +10,36 @@
 
 #include "Game.h"
 #include <GL/glew.h>
-#include "Texture.h"
-#include "VertexArray.h"
-#include "Shader.h"
 #include <algorithm>
-#include "Actor.h"
-#include "SpriteComponent.h"
+#include "Random.h"
+
+#include "MetaAI.h"
 #include "Actor.h"
 #include "Ship.h"
 #include "EnemyShip.h"
 #include "Asteroid.h"
-#include "Random.h"
+
+#include "SpriteComponent.h"
+#include "Renderer.h"
+#include "Texture.h"
+#include "VertexArray.h"
+#include "Shader.h"
+
+#include "UIScreen.h"
+#include "Font.h"
+#include "TitleMenu.h"
+#include "PauseMenu.h"
+#include "HUD.h"
+#include "BGSpriteComponent.h"
+#include "GameOverMenu.h"
 
 Game::Game()
-:mWindow(nullptr)
-,mSpriteShader(nullptr)
-,mIsRunning(true)
+:mRenderer(nullptr)
+,mMetaAI(nullptr)
+,mGameState(EStart)
 ,mUpdatingActors(false)
+,mPlayerDestroyAsteroid(0)
+,mPlayerDestroyShip(0)
 {
 	
 }
@@ -38,55 +51,21 @@ bool Game::Initialize()
 		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
 		return false;
 	}
-	
-	// Set OpenGL attributes
-	// Use the core OpenGL profile
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	// Specify version 3.3
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-	// Request a color buffer with 8-bits per RGBA channel(RGBAを各8bitで表現する)
-	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-	// Enable double buffering(ダブルバッファを設定)
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	// Force OpenGL to use hardware acceleration(GPUを使用してレンダリングを行うことを示す)
-	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-	
-	mWindow = SDL_CreateWindow("Game Programming in C++ (Chapter 5)", 100, 100,
-							   1024, 768, SDL_WINDOW_OPENGL);
-	if (!mWindow)
-	{
-		SDL_Log("Failed to create window: %s", SDL_GetError());
-		return false;
-	}
-	
-	// Create an OpenGL context(コンテクストはOepnGLの全ての要素を管理するもの。管理用の構造体)
-	mContext = SDL_GL_CreateContext(mWindow);
-	
-	// Initialize GLEW
-	glewExperimental = GL_TRUE; // 一部のプラットフォームで出る初期化エラー対策
-	if (glewInit() != GLEW_OK) // 後方互換性を含む拡張システム(GLEW)を使用可能にする
-	{
-		SDL_Log("Failed to initialize GLEW.");
-		return false;
-	}
-	
-	// On some platforms, GLEW will emit a benign error code,
-	// so clear it
-	glGetError();
-	
-	// Make sure we can create/compile shaders
-	if (!LoadShaders())
-	{
-		SDL_Log("Failed to load shaders.");
-		return false;
-	}
 
-	// Create quad for drawing sprites
-	CreateSpriteVerts();
+	if (TTF_Init() != 0)
+	{
+		SDL_Log("Failed to initialize SDL_ttf.");
+		return false;
+	}
+	
+	mRenderer = new Renderer(this);
+	if (!mRenderer->Initialize(1024.0f, 768.0f))
+	{
+		SDL_Log("Failed to initialize renderer");
+		delete mRenderer;
+		mRenderer = nullptr;
+		return false;
+	}
 
 	LoadData();
 
@@ -97,7 +76,7 @@ bool Game::Initialize()
 
 void Game::RunLoop()
 {
-	while (mIsRunning)
+	while (mGameState != EQuit)
 	{
 		ProcessInput();
 		UpdateGame();
@@ -113,23 +92,59 @@ void Game::ProcessInput()
 		switch (event.type)
 		{
 			case SDL_QUIT:
-				mIsRunning = false;
+				mGameState = EQuit;
+				break;
+			case SDL_KEYDOWN:
+				if (!event.key.repeat)
+				{
+					// UIに入力を渡すか、ゲーム内に入力を渡すかをステートで判断
+					if (mGameState == EGameplay)
+					{
+						//HandleKeyPress(event.key.keysym.sym);
+						if (event.key.keysym.sym == SDLK_ESCAPE)
+						{
+							new PauseMenu(this);
+						}
+					}
+					else if (!mUIStack.empty())
+					{
+						mUIStack.back()->
+							HandleKeyPress(event.key.keysym.sym);
+					}
+				}
+				break;
+			case SDL_MOUSEBUTTONDOWN:
+				if (mGameState == EGameplay)
+				{
+					//HandleKeyPress(event.button.button);
+				}
+				else if (!mUIStack.empty())
+				{
+					mUIStack.back()->
+						HandleKeyPress(event.button.button);
+				}
+				break;
+			default:
 				break;
 		}
 	}
 	
 	const Uint8* keyState = SDL_GetKeyboardState(NULL);
-	if (keyState[SDL_SCANCODE_ESCAPE])
-	{
-		mIsRunning = false;
-	}
+	
 
-	mUpdatingActors = true;
-	for (auto actor : mActors)
+	if (mGameState == EGameplay)
 	{
-		actor->ProcessInput(keyState);
+		mUpdatingActors = true;
+		for (auto actor : mActors)
+		{
+			actor->ProcessInput(keyState);
+		}
+		mUpdatingActors = false;
 	}
-	mUpdatingActors = false;
+	else if(!mUIStack.empty())
+	{
+		mUIStack.back()->ProcessInput(keyState); // 最上層に入力を渡す
+	}
 }
 
 void Game::UpdateGame()
@@ -146,112 +161,112 @@ void Game::UpdateGame()
 	}
 	mTicksCount = SDL_GetTicks();
 
-	// Update all actors
-	mUpdatingActors = true;
-	for (auto actor : mActors)
+	if (mGameState == EGameplay)
 	{
-		actor->Update(deltaTime);
-	}
-	mUpdatingActors = false;
-
-	// Move any pending actors to mActors
-	for (auto pending : mPendingActors)
-	{
-		pending->ComputeWorldTransform();
-		mActors.emplace_back(pending);
-	}
-	mPendingActors.clear();
-
-	// Add any dead actors to a temp vector
-	std::vector<Actor*> deadActors;
-	for (auto actor : mActors)
-	{
-		if (actor->GetState() == Actor::EDead)
+		// Update all actors
+		mUpdatingActors = true;
+		for (auto actor : mActors)
 		{
-			deadActors.emplace_back(actor);
+			actor->Update(deltaTime);
+		}
+		mUpdatingActors = false;
+
+		// Move any pending actors to mActors
+		for (auto pending : mPendingActors)
+		{
+			pending->ComputeWorldTransform();
+			mActors.emplace_back(pending);
+		}
+		mPendingActors.clear();
+
+		// Add any dead actors to a temp vector
+		std::vector<Actor*> deadActors;
+		for (auto actor : mActors)
+		{
+			if (actor->GetState() == Actor::EDead)
+			{
+				deadActors.emplace_back(actor);
+			}
+		}
+
+		// Delete dead actors (which removes them from mActors)
+		for (auto actor : deadActors)
+		{
+			delete actor;
+		}
+
+		// Player ship's dead check
+		if (mShip == NULL)
+		{
+			new GameOverMenu(this);
 		}
 	}
 
-	// Delete dead actors (which removes them from mActors)
-	for (auto actor : deadActors)
+	// Update UI screens(スタックされたUIを更新)
+	for (auto ui : mUIStack)
 	{
-		delete actor;
+		if (ui->GetState() == UIScreen::EActive)
+		{
+			ui->Update(deltaTime);
+		}
+	}
+	// Delete any UIScreens that are closed
+	auto iter = mUIStack.begin();
+	while (iter != mUIStack.end())
+	{
+		if ((*iter)->GetState() == UIScreen::EClosing)
+		{
+			delete* iter;
+			iter = mUIStack.erase(iter);
+		}
+		else
+		{
+			++iter;
+		}
 	}
 }
 
 void Game::GenerateOutput()
 {
-	// Set the clear color to grey
-	glClearColor(0.80f, 0.80f, 0.80f, 1.0f);
-	// Clear the color buffer
-	glClear(GL_COLOR_BUFFER_BIT);
-	
-	// Draw all sprite components
-	// Enable alpha blending on the color buffer
-	glEnable(GL_BLEND);          // カラーバッファのブレンディングを有効化
-	glBlendFunc(
-		GL_SRC_ALPHA,            // srcFactorをsrcAlpha
-		GL_ONE_MINUS_SRC_ALPHA   // dstFactorを1 - srcAlpha
-	);
-	
-	// Set shader/vao as active
-	mSpriteShader->SetActive();
-	mSpriteVerts->SetActive();
-	for (auto sprite : mSprites)
-	{
-		sprite->Draw(mSpriteShader);
-	}
-
-	// Swap the buffers
-	SDL_GL_SwapWindow(mWindow);
+	mRenderer->Draw();
 }
 
-bool Game::LoadShaders()
+void Game::CreateBackGround()
 {
-	mSpriteShader = new Shader();
-	if (!mSpriteShader->Load("Shaders/Sprite.vert", "Shaders/Sprite.frag"))
-	{
-		return false;
-	}
+	// 背景用アクター
+	Actor* bgActor = new Actor(this);
+	bgActor->SetPosition(Vector2(0, 0));
+	// 背景その1
+	BGSpriteComponent* bgsc = new BGSpriteComponent(bgActor);
+	bgsc->SetBGTextures(std::vector<Texture*>{
+		mRenderer->GetTexture("Assets/Farback01.png")});
 
-	mSpriteShader->SetActive();
-	// Set the view-projection matrix
-	Matrix4 viewProj = Matrix4::CreateSimpleViewProj(1024.f, 768.f);
-	mSpriteShader->SetMatrixUniform("uViewProj", viewProj);
-	return true;
-}
-
-void Game::CreateSpriteVerts()
-{
-	// 頂点座標にテクスチャ座標を追加して定義
-	// (x,y,z,u,v)の順に定義。
-	// x,y,z:頂点の座標
-	// u,v  :テクスチャ座標
-	float vertices[] = {
-		-0.5f,  0.5f, 0.f, 0.f, 0.f, // top left(x,y,z,u,v)
-		 0.5f,  0.5f, 0.f, 1.f, 0.f, // top right
-		 0.5f, -0.5f, 0.f, 1.f, 1.f, // bottom right
-		-0.5f, -0.5f, 0.f, 0.f, 1.f  // bottom left
-	};
-
-	unsigned int indices[] = {
-		0, 1, 2,
-		2, 3, 0
-	};
-
-	mSpriteVerts = new VertexArray(vertices, 4, indices, 6);
+	// 背景その2
+	BGSpriteComponent* bgsc2 = new BGSpriteComponent(bgActor, 50);
+	bgsc2->SetBGTextures(std::vector<Texture*>{
+		mRenderer->GetTexture("Assets/Stars.png"),
+			mRenderer->GetTexture("Assets/Stars.png")});
+	bgsc2->SetScrollSpeed(-200.0f);
 }
 
 void Game::LoadData()
 {
 	// Create player's ship
 	mShip = new Ship(this);
+	mShip->SetPosition(Vector2(0.0f,-300.0f));
 	mShip->SetRotation(Math::PiOver2);
 
-	// Create enemy's ship
-	mEnemyShip = new EnemyShip(this);
-	mEnemyShip->SetPosition(Vector2(256.0f, 200.0f));
-	mEnemyShip->SetRotation(Math::PiOver2 * -1);
+	// Create MetaAI
+	mMetaAI = new MetaAI(this);
+	mMetaAI->Initialize();
+
+	CreateBackGround();
+
+	// UI elements
+	mHUD = new HUD(this);
+
+	// Title Menu
+	new TitleMenu(this);
 }
 
 void Game::UnloadData()
@@ -263,37 +278,17 @@ void Game::UnloadData()
 		delete mActors.back();
 	}
 
-	// Destroy textures
-	for (auto i : mTextures)
+	// Clear the UI stack
+	while (!mUIStack.empty())
 	{
-		i.second->Unload();
-		delete i.second;
+		delete mUIStack.back();
+		mUIStack.pop_back();
 	}
-	mTextures.clear();
-}
 
-Texture* Game::GetTexture(const std::string& fileName)
-{
-	Texture* tex = nullptr;
-	auto iter = mTextures.find(fileName);
-	if (iter != mTextures.end())
+	if (mRenderer)
 	{
-		tex = iter->second;
+		mRenderer->UnloadData();
 	}
-	else
-	{
-		tex = new Texture();
-		if (tex->Load(fileName))
-		{
-			mTextures.emplace(fileName, tex);
-		}
-		else
-		{
-			delete tex;
-			tex = nullptr;
-		}
-	}
-	return tex;
 }
 
 void Game::AddAsteroid(Asteroid* ast)
@@ -311,14 +306,24 @@ void Game::RemoveAsteroid(Asteroid* ast)
 	}
 }
 
+void Game::CreateEnemyShip()
+{
+	// Create enemy's ship
+	mEnemyShip = new EnemyShip(this);
+	mEnemyShip->SetPosition(Vector2(0.0f, FIELD_LENGTH));
+	mEnemyShip->SetRotation(Math::PiOver2 * -1);
+}
+
 void Game::Shutdown()
 {
 	UnloadData();
-	delete mSpriteVerts;
-	mSpriteShader->Unload();
-	delete mSpriteShader;
-	SDL_GL_DeleteContext(mContext);
-	SDL_DestroyWindow(mWindow);
+
+	if (mRenderer)
+	{
+		mRenderer->Shutdown();
+		delete mRenderer;
+	}
+
 	SDL_Quit();
 }
 
@@ -356,28 +361,31 @@ void Game::RemoveActor(Actor* actor)
 	}
 }
 
-void Game::AddSprite(SpriteComponent* sprite)
+void Game::PushUI(UIScreen* screen)
 {
-	// Find the insertion point in the sorted vector
-	// (The first element with a higher draw order than me)
-	int myDrawOrder = sprite->GetDrawOrder();
-	auto iter = mSprites.begin();
-	for (;
-		iter != mSprites.end();
-		++iter)
-	{
-		if (myDrawOrder < (*iter)->GetDrawOrder())
-		{
-			break;
-		}
-	}
-
-	// Inserts element before position of iterator
-	mSprites.insert(iter, sprite);
+	mUIStack.emplace_back(screen);
 }
 
-void Game::RemoveSprite(SpriteComponent* sprite)
+Font* Game::GetFont(const std::string& fileName)
 {
-	auto iter = std::find(mSprites.begin(), mSprites.end(), sprite);
-	mSprites.erase(iter);
+	auto iter = mFonts.find(fileName);
+	if (iter != mFonts.end())
+	{
+		return iter->second;
+	}
+	else
+	{
+		Font* font = new Font(this);
+		if (font->Load(fileName))
+		{
+			mFonts.emplace(fileName, font);
+		}
+		else
+		{
+			font->Unload();
+			delete font;
+			font = nullptr;
+		}
+		return font;
+	}
 }

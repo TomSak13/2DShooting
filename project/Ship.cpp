@@ -14,6 +14,7 @@
 #include "Game.h"
 #include "Laser.h"
 #include "CircleComponent.h"
+#include "Renderer.h"
 
 Ship::Ship(Game* game)
 	:Actor(game)
@@ -23,14 +24,18 @@ Ship::Ship(Game* game)
 {
 	// Create a sprite component
 	SpriteComponent* sc = new SpriteComponent(this, 150);
-	sc->SetTexture(game->GetTexture("Assets/Ship.png"));
+	sc->SetTexture(game->GetRenderer()->GetTexture("Assets/Ship.png"));
 
 	// Create an input component and set keys/speed
 	InputComponent* ic = new InputComponent(this);
 	ic->SetForwardKey(SDL_SCANCODE_W);
 	ic->SetBackKey(SDL_SCANCODE_S);
-	ic->SetClockwiseKey(SDL_SCANCODE_A);
-	ic->SetCounterClockwiseKey(SDL_SCANCODE_D);
+	ic->SetClockwiseKey(SDL_SCANCODE_LEFT);
+	ic->SetCounterClockwiseKey(SDL_SCANCODE_RIGHT);
+
+	ic->SetRightKey(SDL_SCANCODE_D);
+	ic->SetLeftKey(SDL_SCANCODE_A);
+
 	ic->SetMaxForwardSpeed(300.0f);
 	ic->SetMaxAngularSpeed(Math::TwoPi);
 
@@ -48,7 +53,11 @@ Ship::~Ship()
 
 void Ship::ReceiveDamage(int damage)
 {
-	mHp -= damage;
+	for (int i = 0; i < damage; i++)
+	{
+		mHp--;
+	}
+
 	if (mHp <= 0)
 	{
 		mHp = 0;

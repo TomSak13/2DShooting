@@ -15,6 +15,7 @@ MoveComponent::MoveComponent(class Actor* owner, int updateOrder)
 :Component(owner, updateOrder)
 ,mAngularSpeed(0.0f)
 ,mForwardSpeed(0.0f)
+, mBesideSpeed(0.0f)
 {
 	
 }
@@ -28,10 +29,17 @@ void MoveComponent::Update(float deltaTime)
 		mOwner->SetRotation(rot);
 	}
 	
-	if (!Math::NearZero(mForwardSpeed))
+	if (!Math::NearZero(mForwardSpeed) || !Math::NearZero(mBesideSpeed))
 	{
 		Vector2 pos = mOwner->GetPosition();
-		pos += mOwner->GetForward() * mForwardSpeed * deltaTime;
+		if (mBesideSpeed == 0)
+		{
+			pos += mOwner->GetForward() * mForwardSpeed * deltaTime; /// ‰ñ“]‚ ‚è
+		}
+		else
+		{
+			pos += Vector2(mBesideSpeed, mForwardSpeed) * deltaTime;
+		}
 
 		// Screen wrapping (for asteroids)
 		if (pos.x < -512.0f) { pos.x = -512.0f; }

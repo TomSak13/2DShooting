@@ -14,6 +14,7 @@
 #include "InputComponent.h"
 #include "Game.h"
 #include "Laser.h"
+#include "Renderer.h"
 
 EnemyShip::EnemyShip(Game* game)
 	:Actor(game)
@@ -22,7 +23,7 @@ EnemyShip::EnemyShip(Game* game)
 {
 	// Create a sprite component
 	SpriteComponent* sc = new SpriteComponent(this, 150);
-	sc->SetTexture(game->GetTexture("Assets/Ship.png"));
+	sc->SetTexture(game->GetRenderer()->GetTexture("Assets/Ship.png"));
 
 	// Create a move component
 	MoveComponent* mc = new MoveComponent(this);
@@ -38,6 +39,7 @@ EnemyShip::EnemyShip(Game* game)
 EnemyShip::~EnemyShip()
 {
 	GetGame()->SetEnemyShip(NULL);
+	GetGame()->IncrementPlayerDestroyShip();
 }
 
 void EnemyShip::ReceiveDamage(int damage)
@@ -51,11 +53,6 @@ void EnemyShip::ReceiveDamage(int damage)
 
 void EnemyShip::UpdateActor(float deltaTime)
 {
-	mLaserCooldown -= deltaTime;
-}
-
-void EnemyShip::ActorInput(const uint8_t* keyState)
-{
 	if (mLaserCooldown <= 0.0f)
 	{
 		// Create a laser and set its position/rotation to mine
@@ -67,4 +64,6 @@ void EnemyShip::ActorInput(const uint8_t* keyState)
 		// Reset laser cooldown (half second) レーザーのインターバル時間
 		mLaserCooldown = 3.0f;
 	}
+
+	mLaserCooldown -= deltaTime;
 }

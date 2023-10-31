@@ -15,9 +15,20 @@
 #include <vector>
 #include "Math.h"
 
+#define FIELD_WIDTH (512.0f)
+#define FIELD_LENGTH (384.0f)
+
 class Game
 {
 public:
+	enum GameState
+	{
+		EStart,
+		EGameplay,
+		EPaused,
+		EQuit,
+	};
+
 	Game();
 	bool Initialize();
 	void RunLoop();
@@ -26,53 +37,62 @@ public:
 	void AddActor(class Actor* actor);
 	void RemoveActor(class Actor* actor);
 
-	void AddSprite(class SpriteComponent* sprite);
-	void RemoveSprite(class SpriteComponent* sprite);
-	
-	class Texture* GetTexture(const std::string& fileName);
-	
+	class Renderer* GetRenderer() const { return mRenderer; }
+
+	GameState GetState() const { return mGameState; }
+	void SetState(GameState state) { mGameState = state; }
+
 	// Game-specific (add/remove asteroid)
 	void AddAsteroid(class Asteroid* ast);
 	void RemoveAsteroid(class Asteroid* ast);
 	std::vector<class Asteroid*>& GetAsteroids() { return mAsteroids; }
 	class Ship* GetPlayerShip() { return mShip; }
-	class EnemyShip* GetEnemyShip() { return mEnemyShip;}
+	class EnemyShip* GetEnemyShip() { return mEnemyShip; }
 	void SetPlayerShip(class Ship* ship) { mShip = ship; }
+	void CreateEnemyShip();
 	void SetEnemyShip(class EnemyShip* enemyShip) { mEnemyShip = enemyShip; }
+
+	class Font* GetFont(const std::string& fileName);
+	const std::vector<class UIScreen*>& GetUIStack() { return mUIStack; }
+	void PushUI(class UIScreen* screen);
+
+	void IncrementPlayerDestroyAsteroid() { mPlayerDestroyAsteroid++; }
+	int GetPlayerDestroyAsteroid() { return mPlayerDestroyAsteroid; }
+
+	void IncrementPlayerDestroyShip() { mPlayerDestroyShip++; }
+	int GetPlayerDestroyShip() { return mPlayerDestroyShip; }
 private:
 	void ProcessInput();
 	void UpdateGame();
 	void GenerateOutput();
-	bool LoadShaders();
-	void CreateSpriteVerts();
 	void LoadData();
 	void UnloadData();
-	
-	// Map of textures loaded
-	std::unordered_map<std::string, class Texture*> mTextures;
+	void CreateBackGround();
 
 	// All the actors in the game
 	std::vector<class Actor*> mActors;
 	// Any pending actors
 	std::vector<class Actor*> mPendingActors;
 
-	// All the sprite components drawn
-	std::vector<class SpriteComponent*> mSprites;
+	class Renderer* mRenderer;
+	class HUD* mHUD;
 
-	// Sprite shader
-	class Shader* mSpriteShader;
-	// Sprite vertex array
-	class VertexArray* mSpriteVerts;
-
-	SDL_Window* mWindow;
-	SDL_GLContext mContext;
 	Uint32 mTicksCount;
-	bool mIsRunning;
+
+	GameState mGameState;
+
 	// Track if we're updating actors right now
 	bool mUpdatingActors;
 
 	// Game-specific
+	class MetaAI* mMetaAI;
 	class Ship* mShip; // Player's ship
 	class EnemyShip* mEnemyShip;
 	std::vector<class Asteroid*> mAsteroids;
+
+	std::unordered_map<std::string, class Font*> mFonts;
+	std::vector<class UIScreen*> mUIStack;
+
+	int mPlayerDestroyAsteroid;
+	int mPlayerDestroyShip;
 };

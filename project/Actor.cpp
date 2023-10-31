@@ -125,3 +125,13 @@ void Actor::RemoveComponent(Component* component)
 		mComponents.erase(iter);
 	}
 }
+
+bool Actor::IsOutFrame()
+{
+	if ((GetPosition().x <= -FIELD_WIDTH) || (GetPosition().x >= FIELD_WIDTH) || (GetPosition().y <= -FIELD_LENGTH) || (GetPosition().y >= FIELD_LENGTH))
+	{
+		return true;
+	}
+
+	return false;
+}

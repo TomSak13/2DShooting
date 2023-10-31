@@ -16,6 +16,7 @@
 #include "Asteroid.h"
 #include "Ship.h"
 #include "EnemyShip.h"
+#include "Renderer.h"
 
 Laser::Laser(Game* game)
 	:Actor(game)
@@ -23,7 +24,7 @@ Laser::Laser(Game* game)
 {
 	// Create a sprite component
 	SpriteComponent* sc = new SpriteComponent(this);
-	sc->SetTexture(game->GetTexture("Assets/Laser.png"));
+	sc->SetTexture(game->GetRenderer()->GetTexture("Assets/Laser.png"));
 
 	// Create a move component, and set a forward speed
 	MoveComponent* mc = new MoveComponent(this);
@@ -32,16 +33,6 @@ Laser::Laser(Game* game)
 	// Create a circle component (for collision)
 	mCircle = new CircleComponent(this);
 	mCircle->SetRadius(11.0f);
-}
-
-bool Laser::IsOutFrame()
-{
-	if ((GetPosition().x <= -512.0f) || (GetPosition().x >= 512.0f) || (GetPosition().y <= -384.0f) || (GetPosition().y >= 384.0f))
-	{
-		return true;
-	}
-
-	return false;
 }
 
 void Laser::UpdateActor(float deltaTime)
@@ -61,9 +52,13 @@ void Laser::UpdateActor(float deltaTime)
 			{
 				// The first asteroid we intersect with,
 				// set ourselves and the asteroid to dead
-				SetState(EDead);
-				ast->SetState(EDead);
-				return;
+				if (GetTeam() == EPlayer)
+				{
+					GetGame()->IncrementPlayerDestroyAsteroid();
+					SetState(EDead);
+					ast->SetState(EDead);
+					return;
+				}
 			}
 		}
 
@@ -76,7 +71,7 @@ void Laser::UpdateActor(float deltaTime)
 				{
 					SetState(EDead);
 
-					playerShip->ReceiveDamage(50);
+					playerShip->ReceiveDamage(1);
 					if (playerShip->GetHp() <= 0)
 					{
 						

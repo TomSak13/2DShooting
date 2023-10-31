@@ -61,6 +61,33 @@
     <ClCompile Include="EnemyShip.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UIScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PauseMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HUD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BGSpriteComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MetaAI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOverMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h">
@@ -109,6 +136,33 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="EnemyShip.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIScreen.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PauseMenu.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleMenu.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BGSpriteComponent.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MetaAI.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOverMenu.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

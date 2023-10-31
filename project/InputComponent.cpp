@@ -15,6 +15,8 @@ InputComponent::InputComponent(class Actor* owner)
 ,mBackKey(0)
 ,mClockwiseKey(0)
 ,mCounterClockwiseKey(0)
+,mLeftKey(0)
+,mRightKey(0)
 {
 	
 }
@@ -25,16 +27,28 @@ void InputComponent::ProcessInput(const uint8_t* keyState)
 	float forwardSpeed = 0.0f;
 	if (keyState[mForwardKey])
 	{
-		forwardSpeed += mMaxForwardSpeed;
+		forwardSpeed += mMaxMoveSpeed;
 	}
 	if (keyState[mBackKey])
 	{
-		forwardSpeed -= mMaxForwardSpeed;
+		forwardSpeed -= mMaxMoveSpeed;
 	}
 	SetForwardSpeed(forwardSpeed);
 
+	float besideSpeed = 0.0f;
+	if (keyState[mLeftKey])
+	{
+		besideSpeed -= mMaxMoveSpeed;
+	}
+	if (keyState[mRightKey])
+	{
+		besideSpeed += mMaxMoveSpeed;
+	}
+	SetBesideSpeed(besideSpeed);
+
 	// Calculate angular speed for MoveComponent
 	float angularSpeed = 0.0f;
+	
 	if (keyState[mClockwiseKey])
 	{
 		angularSpeed += mMaxAngularSpeed;

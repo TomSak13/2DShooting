@@ -1,23 +1,19 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
-// Copyright (C) 2017 Sanjay Madhav. 
-// Copyright (C) 2023 Tomohiko Sakaguchi
+// Copyright (C) 2017 Sanjay Madhav. All rights reserved.
 // 
-// All rights reserved.
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
 
 #pragma once
-#include "Actor.h"
-class Laser : public Actor
+#include "UIScreen.h"
+
+class PauseMenu : public UIScreen
 {
 public:
-	Laser(class Game* game);
+	PauseMenu(class Game* game);
+	~PauseMenu();
 
-	void UpdateActor(float deltaTime) override;
-
-private:
-	class CircleComponent* mCircle;
-	float mDeathTimer;
+	void HandleKeyPress(int key) override;
 };

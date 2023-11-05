@@ -66,6 +66,8 @@ public:
 	bool GetUpdatingActors() { return mUpdatingActors; }
 	void SetUpdatingActors(bool updatingActors) { mUpdatingActors = updatingActors; }
 
+	class CollisionBroker* GetCollisionBroker() { return mCollisionBroker; }
+
 	void UpdateGame();
 	void GenerateOutput();
 private:
@@ -99,4 +101,6 @@ private:
 
 	int mPlayerDestroyAsteroid;
 	int mPlayerDestroyShip;
+
+	class CollisionBroker* mCollisionBroker;
 };

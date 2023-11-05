@@ -21,6 +21,8 @@
 #include "EnemyShip.h"
 #include "Asteroid.h"
 
+#include "CollisionBroker.h"
+
 #include "SpriteComponent.h"
 #include "Renderer.h"
 #include "Texture.h"
@@ -71,6 +73,8 @@ bool Game::Initialize()
 	LoadData();
 
 	mTicksCount = SDL_GetTicks();
+
+	mCollisionBroker = new CollisionBroker();
 	
 	return true;
 }
@@ -98,6 +102,8 @@ void Game::UpdateGame()
 			actor->Update(deltaTime);
 		}
 		mUpdatingActors = false;
+
+		mCollisionBroker->HandleCollision(this);
 
 		// Move any pending actors to mActors
 		for (auto pending : mPendingActors)

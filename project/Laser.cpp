@@ -18,6 +18,9 @@
 #include "EnemyShip.h"
 #include "Renderer.h"
 
+#include "CollisionBroker.h"
+#include "Collision.h"
+
 Laser::Laser(Game* game)
 	:Actor(game)
 	,mDeathTimer(1.0f)
@@ -33,6 +36,16 @@ Laser::Laser(Game* game)
 	// Create a circle component (for collision)
 	mCircle = new CircleComponent(this);
 	mCircle->SetRadius(11.0f);
+
+	Collision* laserCollision = new Collision(game);
+	laserCollision->SetCallback(handleCollisionCallback);
+
+	game->GetCollisionBroker()->AddCollision(laserCollision);
+}
+
+void handleCollisionCallback(Game* game)
+{
+
 }
 
 void Laser::UpdateActor(float deltaTime)

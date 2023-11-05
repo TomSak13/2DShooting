@@ -44,6 +44,8 @@ public:
 	void GetScreenDirection(Vector3& outStart, Vector3& outDir) const;
 	float GetScreenWidth() const { return mScreenWidth; }
 	float GetScreenHeight() const { return mScreenHeight; }
+
+	class Font* GetFont(const std::string& fileName);
 private:
 	bool LoadShaders();
 	void CreateSpriteVerts();
@@ -54,9 +56,10 @@ private:
 	// All the sprite components drawn
 	std::vector<class SpriteComponent*> mSprites;
 
-
 	// Game
 	class Game* mGame;
+
+	std::unordered_map<std::string, class Font*> mFonts;
 
 	// Sprite shader
 	class Shader* mSpriteShader;

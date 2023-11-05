@@ -11,7 +11,9 @@
 #include "Game.h"
 #include <GL/glew.h>
 #include <algorithm>
+#include <SDL/SDL_ttf.h>
 #include "Random.h"
+#include "InputSystem.h"
 
 #include "MetaAI.h"
 #include "Actor.h"
@@ -26,7 +28,6 @@
 #include "Shader.h"
 
 #include "UIScreen.h"
-#include "Font.h"
 #include "TitleMenu.h"
 #include "PauseMenu.h"
 #include "HUD.h"
@@ -72,79 +73,6 @@ bool Game::Initialize()
 	mTicksCount = SDL_GetTicks();
 	
 	return true;
-}
-
-void Game::RunLoop()
-{
-	while (mGameState != EQuit)
-	{
-		ProcessInput();
-		UpdateGame();
-		GenerateOutput();
-	}
-}
-
-void Game::ProcessInput()
-{
-	SDL_Event event;
-	while (SDL_PollEvent(&event))
-	{
-		switch (event.type)
-		{
-			case SDL_QUIT:
-				mGameState = EQuit;
-				break;
-			case SDL_KEYDOWN:
-				if (!event.key.repeat)
-				{
-					// UI‚É“ü—Í‚ð“n‚·‚©AƒQ[ƒ€“à‚É“ü—Í‚ð“n‚·‚©‚ðƒXƒe[ƒg‚Å”»’f
-					if (mGameState == EGameplay)
-					{
-						//HandleKeyPress(event.key.keysym.sym);
-						if (event.key.keysym.sym == SDLK_ESCAPE)
-						{
-							new PauseMenu(this);
-						}
-					}
-					else if (!mUIStack.empty())
-					{
-						mUIStack.back()->
-							HandleKeyPress(event.key.keysym.sym);
-					}
-				}
-				break;
-			case SDL_MOUSEBUTTONDOWN:
-				if (mGameState == EGameplay)
-				{
-					//HandleKeyPress(event.button.button);
-				}
-				else if (!mUIStack.empty())
-				{
-					mUIStack.back()->
-						HandleKeyPress(event.button.button);
-				}
-				break;
-			default:
-				break;
-		}
-	}
-	
-	const Uint8* keyState = SDL_GetKeyboardState(NULL);
-	
-
-	if (mGameState == EGameplay)
-	{
-		mUpdatingActors = true;
-		for (auto actor : mActors)
-		{
-			actor->ProcessInput(keyState);
-		}
-		mUpdatingActors = false;
-	}
-	else if(!mUIStack.empty())
-	{
-		mUIStack.back()->ProcessInput(keyState); // Åã‘w‚É“ü—Í‚ð“n‚·
-	}
 }
 
 void Game::UpdateGame()
@@ -364,28 +292,4 @@ void Game::RemoveActor(Actor* actor)
 void Game::PushUI(UIScreen* screen)
 {
 	mUIStack.emplace_back(screen);
-}
-
-Font* Game::GetFont(const std::string& fileName)
-{
-	auto iter = mFonts.find(fileName);
-	if (iter != mFonts.end())
-	{
-		return iter->second;
-	}
-	else
-	{
-		Font* font = new Font(this);
-		if (font->Load(fileName))
-		{
-			mFonts.emplace(fileName, font);
-		}
-		else
-		{
-			font->Unload();
-			delete font;
-			font = nullptr;
-		}
-		return font;
-	}
 }

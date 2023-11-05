@@ -24,7 +24,7 @@ UIScreen::UIScreen(Game* game)
 {
 	// Add to UI Stack
 	mGame->PushUI(this); // UIの階層に作成したUIをスタックする(作成した順にスタックされていく)
-	mFont = mGame->GetFont("Assets/Carlito-Regular.ttf");
+	mFont = mGame->GetRenderer()->GetFont("Assets/Carlito-Regular.ttf");
 	mButtonOn = mGame->GetRenderer()->GetTexture("Assets/ButtonYellow.png");
 	mButtonOff = mGame->GetRenderer()->GetTexture("Assets/ButtonBlue.png");
 }

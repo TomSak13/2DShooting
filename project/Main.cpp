@@ -7,14 +7,27 @@
 // ----------------------------------------------------------------
 
 #include "Game.h"
+#include "InputSystem.h"
 
 int main(int argc, char** argv)
 {
 	Game game;
+	InputSystem mInputSystem;
 	bool success = game.Initialize();
-	if (success)
+	while (success)
 	{
-		game.RunLoop();
+		// “ü—Í§Œä
+		mInputSystem.ProcessInput(&game);
+
+		// XV
+		game.UpdateGame();
+		if (game.GetState() == Game::EQuit)
+		{
+			break;
+		}
+
+		// •`‰æ
+		game.GenerateOutput();
 	}
 	game.Shutdown();
 	return 0;

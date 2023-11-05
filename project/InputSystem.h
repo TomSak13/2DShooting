@@ -6,19 +6,15 @@
 // ----------------------------------------------------------------
 
 #pragma once
-#include <vector>
-#include "Collision.h"
+#include "Game.h"
 
-class CollisionBroker
+class InputSystem
 {
 public:
-	CollisionBroker();
-	~CollisionBroker();
+	InputSystem();
+	~InputSystem();
 
-	void AddCollision(Collision* collision);
-
-	void HandleCollision(Game* game);
-
+	void ProcessInput(Game* game);
+	
 private:
-	std::vector<Collision*> mCollisionStack;
 };

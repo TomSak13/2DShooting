@@ -31,7 +31,6 @@ public:
 
 	Game();
 	bool Initialize();
-	void RunLoop();
 	void Shutdown();
 
 	void AddActor(class Actor* actor);
@@ -52,7 +51,6 @@ public:
 	void CreateEnemyShip();
 	void SetEnemyShip(class EnemyShip* enemyShip) { mEnemyShip = enemyShip; }
 
-	class Font* GetFont(const std::string& fileName);
 	const std::vector<class UIScreen*>& GetUIStack() { return mUIStack; }
 	void PushUI(class UIScreen* screen);
 
@@ -61,10 +59,17 @@ public:
 
 	void IncrementPlayerDestroyShip() { mPlayerDestroyShip++; }
 	int GetPlayerDestroyShip() { return mPlayerDestroyShip; }
-private:
-	void ProcessInput();
+
+	std::vector<class Actor*> GetActors() { return mActors; }
+	std::vector<class Actor*> GetPendingActors() { return mPendingActors; }
+
+	bool GetUpdatingActors() { return mUpdatingActors; }
+	void SetUpdatingActors(bool updatingActors) { mUpdatingActors = updatingActors; }
+
 	void UpdateGame();
 	void GenerateOutput();
+private:
+	
 	void LoadData();
 	void UnloadData();
 	void CreateBackGround();
@@ -90,7 +95,6 @@ private:
 	class EnemyShip* mEnemyShip;
 	std::vector<class Asteroid*> mAsteroids;
 
-	std::unordered_map<std::string, class Font*> mFonts;
 	std::vector<class UIScreen*> mUIStack;
 
 	int mPlayerDestroyAsteroid;

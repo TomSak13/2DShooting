@@ -15,7 +15,7 @@
 class Font
 {
 public:
-	Font(class Game* game);
+	Font();
 	~Font();
 	
 	// フォントファイルのロード/アンロード
@@ -29,5 +29,4 @@ public:
 private:
 	// ポイントサイズとフォントデータの連想配列
 	std::unordered_map<int, TTF_Font*> mFontData;
-	class Game* mGame;
 };

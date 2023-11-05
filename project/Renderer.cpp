@@ -13,6 +13,7 @@
 #include "VertexArray.h"
 #include "SpriteComponent.h"
 #include "UIScreen.h"
+#include "Font.h"
 #include "Game.h"
 #include <GL/glew.h>
 
@@ -250,4 +251,28 @@ void Renderer::GetScreenDirection(Vector3& outStart, Vector3& outDir) const
 	// Get direction vector
 	outDir = end - outStart;
 	outDir.Normalize();
+}
+
+Font* Renderer::GetFont(const std::string& fileName)
+{
+	auto iter = mFonts.find(fileName);
+	if (iter != mFonts.end())
+	{
+		return iter->second;
+	}
+	else
+	{
+		Font* font = new Font();
+		if (font->Load(fileName))
+		{
+			mFonts.emplace(fileName, font);
+		}
+		else
+		{
+			font->Unload();
+			delete font;
+			font = nullptr;
+		}
+		return font;
+	}
 }

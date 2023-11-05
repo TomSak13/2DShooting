@@ -11,8 +11,7 @@
 #include <vector>
 #include "Game.h"
 
-Font::Font(class Game* game)
-	:mGame(game)
+Font::Font()
 {
 	
 }

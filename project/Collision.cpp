@@ -5,10 +5,12 @@
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
 #include "Collision.h"
+#include "CollisionBroker.h"
+#include "Game.h"
 
 Collision::Collision(Game* game)
 {
-	mCallback = nullptr;
+	game->GetCollisionBroker()->AddCollision(this);
 }
 
 Collision::~Collision()
@@ -16,10 +18,12 @@ Collision::~Collision()
 	
 }
 
-void Collision::HandleCollision(Game* game)
+void Collision::Remove(Game* game)
 {
-	if (mCallback != nullptr)
-	{
-		mCallback(game);
-	}
+	game->GetCollisionBroker()->RemoveCollision(this);
+}
+
+bool Collision::HandleCollision(Game* game)
+{
+	return true;
 }

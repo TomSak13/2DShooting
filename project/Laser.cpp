@@ -20,6 +20,7 @@
 
 #include "CollisionBroker.h"
 #include "Collision.h"
+#include "LaserCollision.h"
 
 Laser::Laser(Game* game)
 	:Actor(game)
@@ -37,15 +38,14 @@ Laser::Laser(Game* game)
 	mCircle = new CircleComponent(this);
 	mCircle->SetRadius(11.0f);
 
-	Collision* laserCollision = new Collision(game);
-	laserCollision->SetCallback(handleCollisionCallback);
-
-	game->GetCollisionBroker()->AddCollision(laserCollision);
+	mCollision = new LaserCollision(game,this);
+	mGame = game;
 }
 
-void handleCollisionCallback(Game* game)
+Laser::~Laser()
 {
-
+	mCollision->RemoveCollision(mGame);
+	delete mCollision;
 }
 
 void Laser::UpdateActor(float deltaTime)
@@ -55,62 +55,5 @@ void Laser::UpdateActor(float deltaTime)
 	if (mDeathTimer <= 0.0f || IsOutFrame())
 	{
 		SetState(EDead);
-	}
-	else
-	{
-		// Do we intersect with an asteroid?
-		for (auto ast : GetGame()->GetAsteroids())
-		{
-			if (Intersect(*mCircle, *(ast->GetCircle())))
-			{
-				// The first asteroid we intersect with,
-				// set ourselves and the asteroid to dead
-				if (GetTeam() == EPlayer)
-				{
-					GetGame()->IncrementPlayerDestroyAsteroid();
-					SetState(EDead);
-					ast->SetState(EDead);
-					return;
-				}
-			}
-		}
-
-		class Ship* playerShip = GetGame()->GetPlayerShip();
-		if (playerShip != NULL)
-		{
-			if (playerShip->GetState() != EDead && playerShip->GetTeam() != GetTeam())
-			{
-				if (Intersect(*mCircle, *(playerShip->GetCircle())))
-				{
-					SetState(EDead);
-
-					playerShip->ReceiveDamage(1);
-					if (playerShip->GetHp() <= 0)
-					{
-						
-						playerShip->SetState(EDead);
-					}
-				}
-			}
-		}
-
-		class EnemyShip* enemyShip = GetGame()->GetEnemyShip();
-		if (enemyShip != NULL)
-		{
-			if (enemyShip->GetState() != EDead && enemyShip->GetTeam() != GetTeam())
-			{
-				if (Intersect(*mCircle, *(enemyShip->GetCircle())))
-				{
-					SetState(EDead);
-
-					enemyShip->ReceiveDamage(50);
-					if (enemyShip->GetHp() <= 0)
-					{
-						
-						enemyShip->SetState(EDead);
-					}
-				}
-			}
-		}
 	}
 }

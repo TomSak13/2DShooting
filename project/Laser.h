@@ -14,10 +14,16 @@ class Laser : public Actor
 {
 public:
 	Laser(class Game* game);
+	~Laser();
+
+	class CircleComponent* GetCircle() { return mCircle; }
 
 	void UpdateActor(float deltaTime) override;
 
 private:
 	class CircleComponent* mCircle;
+	class Game* mGame;
+	class LaserCollision* mCollision;
+
 	float mDeathTimer;
 };

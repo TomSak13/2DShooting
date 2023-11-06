@@ -7,15 +7,18 @@
 
 #pragma once
 
+#include "Collision.h"
+#include "Laser.h"
 
-class Collision
+class LaserCollision : Collision
 {
 public:
-	Collision(class Game* game);
-	~Collision();
+	LaserCollision(class Game* game, Laser* laser);
+	~LaserCollision();
 
-	void Remove(class Game* game);
+	void RemoveCollision(class Game* game);
 
-	virtual bool HandleCollision(class Game* game); /* Õ“Ëˆ— */
+	bool HandleCollision(class Game* game) override; /* Õ“Ëˆ— */
 private:
+	Laser* mCollideLaser;
 };

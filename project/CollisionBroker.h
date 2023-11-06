@@ -8,6 +8,7 @@
 #pragma once
 #include <vector>
 #include "Collision.h"
+#include "Game.h"
 
 class CollisionBroker
 {
@@ -16,6 +17,7 @@ public:
 	~CollisionBroker();
 
 	void AddCollision(Collision* collision);
+	void RemoveCollision(Collision* collision);
 
 	void HandleCollision(Game* game);
 

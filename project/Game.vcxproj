@@ -26,6 +26,7 @@
     <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="Laser.cpp" />
+    <ClCompile Include="LaserCollision.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="MetaAI.cpp" />
@@ -57,6 +58,7 @@
     <ClInclude Include="InputComponent.h" />
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="Laser.h" />
+    <ClInclude Include="LaserCollision.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="MetaAI.h" />
     <ClInclude Include="MoveComponent.h" />

@@ -17,6 +17,13 @@ CollisionBroker::~CollisionBroker()
 	mCollisionStack.clear();
 }
 
+void CollisionBroker::RemoveCollision(Collision* collision)
+{
+	auto iterEnd = remove(mCollisionStack.begin(), mCollisionStack.end(), collision);
+
+	mCollisionStack.erase(iterEnd, mCollisionStack.end());
+}
+
 void CollisionBroker::AddCollision(Collision* collision)
 {
 	if (collision == NULL)
@@ -31,8 +38,14 @@ void CollisionBroker::HandleCollision(Game* game)
 {
 	for (auto collision: mCollisionStack)
 	{
-		collision->HandleCollision(game);
-	}
+		if (collision == NULL)
+		{
+			continue;
+		}
 
-	mCollisionStack.clear();
+		if (collision->HandleCollision(game))
+		{
+			RemoveCollision(collision);
+		}
+	}
 }

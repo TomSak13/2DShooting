@@ -17,5 +17,7 @@ public:
 	void Asteroid::UpdateActor(float deltaTime) override;
 	class CircleComponent* GetCircle() { return mCircle; }
 private:
+	class Game* mGame;
+	class AsteroidCollision* mCollision;
 	class CircleComponent* mCircle;
 };

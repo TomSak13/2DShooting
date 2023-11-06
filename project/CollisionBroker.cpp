@@ -19,9 +19,11 @@ CollisionBroker::~CollisionBroker()
 
 void CollisionBroker::RemoveCollision(Collision* collision)
 {
-	auto iterEnd = remove(mCollisionStack.begin(), mCollisionStack.end(), collision);
-
-	mCollisionStack.erase(iterEnd, mCollisionStack.end());
+	auto iter = std::find(mCollisionStack.begin(), mCollisionStack.end(), collision);
+	if (iter != mCollisionStack.end())
+	{
+		mCollisionStack.erase(iter);
+	}
 }
 
 void CollisionBroker::AddCollision(Collision* collision)

@@ -15,6 +15,8 @@
 #include "Ship.h"
 #include "Renderer.h"
 
+#include "AsteroidCollision.h"
+
 Asteroid::Asteroid(Game* game)
 	:Actor(game)
 	,mCircle(nullptr)
@@ -36,11 +38,17 @@ Asteroid::Asteroid(Game* game)
 
 	// Add to mAsteroids in game
 	game->AddAsteroid(this);
+
+	mCollision = new AsteroidCollision(game, this);
+	mGame = game;
 }
 
 Asteroid::~Asteroid()
 {
 	GetGame()->RemoveAsteroid(this);
+
+	mCollision->RemoveCollision(mGame);
+	delete mCollision;
 }
 
 void Asteroid::UpdateActor(float deltaTime)
@@ -50,22 +58,5 @@ void Asteroid::UpdateActor(float deltaTime)
 		SetState(EDead);
 	}
 
-	class Ship* playerShip = GetGame()->GetPlayerShip();
-	if (playerShip != NULL)
-	{
-		if (playerShip->GetState() != EDead && playerShip->GetTeam() != GetTeam())
-		{
-			if (Intersect(*mCircle, *(playerShip->GetCircle())))
-			{
-				SetState(EDead);
-
-				playerShip->ReceiveDamage(1);
-				if (playerShip->GetHp() <= 0)
-				{
-
-					playerShip->SetState(EDead);
-				}
-			}
-		}
-	}
+	return;
 }

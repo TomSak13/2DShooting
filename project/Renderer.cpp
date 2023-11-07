@@ -33,6 +33,12 @@ bool Renderer::Initialize(float screenWidth, float screenHeight)
 	mScreenWidth = screenWidth;
 	mScreenHeight = screenHeight;
 
+	if (TTF_Init() != 0)
+	{
+		SDL_Log("Failed to initialize SDL_ttf.");
+		return false;
+	}
+
 	// Set OpenGL attributes
 	// Use the core OpenGL profile
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -49,6 +55,7 @@ bool Renderer::Initialize(float screenWidth, float screenHeight)
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	// Force OpenGL to use hardware acceleration
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+
 
 	mWindow = SDL_CreateWindow("Game Programming in C++ (Chapter 11)", 100, 100,
 		static_cast<int>(mScreenWidth), static_cast<int>(mScreenHeight), SDL_WINDOW_OPENGL);
@@ -88,6 +95,8 @@ bool Renderer::Initialize(float screenWidth, float screenHeight)
 
 void Renderer::Shutdown()
 {
+	UnloadData();
+
 	delete mSpriteVerts;
 
 	mSpriteShader->Unload();

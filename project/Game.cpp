@@ -47,52 +47,17 @@ Game::Game()
 	
 }
 
-bool Game::Initialize()
+bool Game::Initialize(Renderer* renderer)
 {
-	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO) != 0)
-	{
-		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
-		return false;
-	}
-
-	if (TTF_Init() != 0)
-	{
-		SDL_Log("Failed to initialize SDL_ttf.");
-		return false;
-	}
-	
-	mRenderer = new Renderer(this);
-	if (!mRenderer->Initialize(1024.0f, 768.0f))
-	{
-		SDL_Log("Failed to initialize renderer");
-		delete mRenderer;
-		mRenderer = nullptr;
-		return false;
-	}
-
-	LoadData();
-
-	mTicksCount = SDL_GetTicks();
+	mRenderer = renderer;
 
 	mCollisionBroker = new CollisionBroker();
 	
 	return true;
 }
 
-void Game::UpdateGame()
+void Game::UpdateGame(float deltaTime)
 {
-	// Compute delta time
-	// Wait until 16ms has elapsed since last frame
-	while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 16))
-		;
-
-	float deltaTime = (SDL_GetTicks() - mTicksCount) / 1000.0f;
-	if (deltaTime > 0.05f)
-	{
-		deltaTime = 0.05f;
-	}
-	mTicksCount = SDL_GetTicks();
-
 	if (mGameState == EGameplay)
 	{
 		// Update all actors
@@ -160,11 +125,6 @@ void Game::UpdateGame()
 	}
 }
 
-void Game::GenerateOutput()
-{
-	mRenderer->Draw();
-}
-
 void Game::CreateBackGround()
 {
 	// 背景用アクター
@@ -218,11 +178,6 @@ void Game::UnloadData()
 		delete mUIStack.back();
 		mUIStack.pop_back();
 	}
-
-	if (mRenderer)
-	{
-		mRenderer->UnloadData();
-	}
 }
 
 void Game::AddAsteroid(Asteroid* ast)
@@ -251,12 +206,6 @@ void Game::CreateEnemyShip()
 void Game::Shutdown()
 {
 	UnloadData();
-
-	if (mRenderer)
-	{
-		mRenderer->Shutdown();
-		delete mRenderer;
-	}
 
 	SDL_Quit();
 }

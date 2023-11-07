@@ -30,7 +30,7 @@ public:
 	};
 
 	Game();
-	bool Initialize();
+	bool Initialize(class Renderer* renderer);
 	void Shutdown();
 
 	void AddActor(class Actor* actor);
@@ -68,11 +68,11 @@ public:
 
 	class CollisionBroker* GetCollisionBroker() { return mCollisionBroker; }
 
-	void UpdateGame();
-	void GenerateOutput();
+	void UpdateGame(float deltaTime);
+
+	void LoadData();
 private:
 	
-	void LoadData();
 	void UnloadData();
 	void CreateBackGround();
 

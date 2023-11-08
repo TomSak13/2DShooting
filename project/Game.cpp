@@ -38,7 +38,6 @@
 
 Game::Game()
 :mRenderer(nullptr)
-,mMetaAI(nullptr)
 ,mGameState(EStart)
 ,mUpdatingActors(false)
 ,mPlayerDestroyAsteroid(0)
@@ -149,10 +148,6 @@ void Game::LoadData()
 	mShip = new Ship(this);
 	mShip->SetPosition(Vector2(0.0f,-300.0f));
 	mShip->SetRotation(Math::PiOver2);
-
-	// Create MetaAI
-	mMetaAI = new MetaAI(this);
-	mMetaAI->Initialize();
 
 	CreateBackGround();
 

@@ -12,18 +12,20 @@
 #include "Actor.h"
 #include <cstdint>
 
-class MetaAI : public Actor
+class MetaAI
 {
 public:
 	const int MaxAsteroidNum = 20;
 
-	MetaAI(Game* game);
+	MetaAI();
 	MetaAI::~MetaAI();
 
 	void Initialize();
 
-	void UpdateActor(float deltaTime) override;
+	void Update(float deltaTime, class Game* game);
 
 private:
+
+	void UpdateGenerateAsteroid(class Game* game);
 	float mCreateAsteroidInterval;
 };

@@ -7,6 +7,7 @@
 // ----------------------------------------------------------------
 
 #include "Game.h"
+#include "MetaAI.h"
 #include "InputSystem.h"
 #include "Renderer.h"
 
@@ -31,26 +32,29 @@ int main(int argc, char** argv)
 	Game game;
 	InputSystem inputSystem;
 	Renderer renderer(&game);
+	MetaAI metaAI;
+
 	Uint32 tickCount;
 	float deltaTime;
 
+	// èâä˙âª
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
 	{
 		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
 		return false;
 	}
-
 	if (!renderer.Initialize(1024.0f, 768.0f))
 	{
 		SDL_Log("Failed to initialize renderer");
 		return -1;
 	}
-
 	if (!game.Initialize(&renderer))
 	{
 		SDL_Log("Failed to initialize game");
 		return -1;
 	}
+	metaAI.Initialize();
+
 	tickCount = SDL_GetTicks();
 	game.LoadData();
 
@@ -64,12 +68,13 @@ int main(int argc, char** argv)
 		inputSystem.ProcessInput(&game);
 
 		// çXêV
+		metaAI.Update(deltaTime, &game);
 		game.UpdateGame(deltaTime);
 		if (game.GetState() == Game::EQuit)
 		{
 			break;
 		}
-
+		
 		// ï`âÊ
 		renderer.Draw();
 	}

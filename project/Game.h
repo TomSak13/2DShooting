@@ -84,15 +84,11 @@ private:
 	class Renderer* mRenderer;
 	class HUD* mHUD;
 
-	Uint32 mTicksCount;
-
 	GameState mGameState;
 
 	// Track if we're updating actors right now
 	bool mUpdatingActors;
 
-	// Game-specific
-	class MetaAI* mMetaAI;
 	class Ship* mShip; // Player's ship
 	class EnemyShip* mEnemyShip;
 	std::vector<class Asteroid*> mAsteroids;

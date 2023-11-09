@@ -14,7 +14,9 @@
 #include <algorithm>
 
 MetaAI::MetaAI()
-	:mCreateAsteroidInterval(2.0f)
+	:mCreateAsteroidInterval(MAX_CREATE_ASTEROID_INTERVAL),
+	mState(PLAYER_EMOTION_STATE::INCREASE_ENEMY),
+	mCreateAsteroidIntervalStep(MAX_CREATE_ASTEROID_INTERVAL)
 {
 	
 }
@@ -37,10 +39,8 @@ void MetaAI::UpdateGenerateAsteroid(class Game* game)
 	asteroid->SetPosition(randPos);
 }
 
-void MetaAI::Update(float deltaTime, Game* game)
+void MetaAI::IncreaseEnemy(float deltaTime, Game* game, int asteroidCount)
 {
-	std::vector<class Asteroid*> asteroidList = game->GetAsteroids();
-
 	/* create boss */
 	if (game->GetPlayerDestroyAsteroid() > 0 && game->GetPlayerDestroyAsteroid() % 5 == 0
 		&& game->GetEnemyShip() == NULL)
@@ -49,14 +49,61 @@ void MetaAI::Update(float deltaTime, Game* game)
 	}
 
 	/* create asteroid */
-	if ((int)asteroidList.size() < MaxAsteroidNum)
+	if (asteroidCount < MAX_ASTEROID_NUM)
 	{
-		/* 0.5•b‚²‚Æ‚Éˆê‚Â¶¬ */
+		/* ¶¬ŠÔŠu‚ð‹·‚ß‚È‚ª‚ç‘‚â‚µ‚Ä‚¢‚­ */
 		mCreateAsteroidInterval -= deltaTime;
 		if (mCreateAsteroidInterval <= 0.0f)
 		{
 			UpdateGenerateAsteroid(game);
-			mCreateAsteroidInterval = 0.5f;
+
+			if (mCreateAsteroidIntervalStep > MIN_CREATE_ASTEROID_INTERVAL) {
+				mCreateAsteroidIntervalStep -= INCREASE_CREATE_ASTEROID_STEP;
+			}
+
+			mCreateAsteroidInterval = mCreateAsteroidIntervalStep;
 		}
+	}
+
+	/* state check */
+	if (mCreateAsteroidIntervalStep <= MIN_CREATE_ASTEROID_INTERVAL)
+	{
+		mState = RUSH;
+	}
+}
+
+void MetaAI::Rush(float deltaTime, Game* game, int asteroidCount)
+{
+	/* create boss */
+
+	/* create asteroid */
+
+	/* state check */
+	
+}
+
+void MetaAI::Relax(float deltaTime, Game* game, int asteroidCount)
+{
+	/* create asteroid */
+
+	/* state check */
+}
+
+void MetaAI::Update(float deltaTime, Game* game)
+{
+	std::vector<class Asteroid*> asteroidList = game->GetAsteroids();
+
+	switch (mState)
+	{
+	    case INCREASE_ENEMY:
+			IncreaseEnemy(deltaTime, game, asteroidList.size());
+		    break;
+		case RUSH:
+			Rush(deltaTime, game, asteroidList.size());
+			break;
+		case RELAX:
+			break;
+		default:
+			break;
 	}
 }

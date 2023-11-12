@@ -24,6 +24,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameOverMenu.cpp" />
     <ClCompile Include="HUD.cpp" />
+    <ClCompile Include="IncreaseEnemySequence.cpp" />
     <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="Laser.cpp" />
@@ -58,6 +59,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameOverMenu.h" />
     <ClInclude Include="HUD.h" />
+    <ClInclude Include="IncreaseEnemySequence.h" />
     <ClInclude Include="InputComponent.h" />
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="Laser.h" />

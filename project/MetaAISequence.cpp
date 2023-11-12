@@ -7,14 +7,19 @@
 
 #include "MetaAISequence.h"
 
-void MetaAISequence::Enter(Game* game) 
+MetaAISequence::~MetaAISequence()
 {
 
 }
 
-MetaAI::PLAYER_EMOTION_STATE MetaAISequence::Execute(float deltaTime, Game* game)
+void MetaAISequence::Enter(Game* game)
 {
-	return MetaAI::PLAYER_EMOTION_STATE::INCREASE_ENEMY;
+
+}
+
+bool MetaAISequence::Execute(float deltaTime, Game* game)
+{
+	return false;
 }
 
 void MetaAISequence::Exit(Game* game)

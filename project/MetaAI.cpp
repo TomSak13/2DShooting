@@ -16,7 +16,9 @@
 MetaAI::MetaAI()
 	:mCreateAsteroidInterval(MAX_CREATE_ASTEROID_INTERVAL),
 	mState(PLAYER_EMOTION_STATE::INCREASE_ENEMY),
-	mCreateAsteroidIntervalStep(MAX_CREATE_ASTEROID_INTERVAL)
+	mCreateAsteroidIntervalStep(MAX_CREATE_ASTEROID_INTERVAL),
+	mSequence(nullptr),
+	mIncreaseEnemySequence(nullptr)
 {
 	
 }
@@ -28,6 +30,9 @@ MetaAI::~MetaAI()
 
 void MetaAI::Initialize()
 {
+	mIncreaseEnemySequence = new IncreaseEnemySequence();
+
+	mSequence = mIncreaseEnemySequence;
 }
 
 void MetaAI::UpdateGenerateAsteroid(class Game* game)

@@ -4,16 +4,16 @@
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
-#include "Game.h"
-#include "MetaAI.h"
-
 #pragma once
+
 class MetaAISequence
 {
 public:
-	virtual void Enter(Game* game);
-	virtual MetaAI::PLAYER_EMOTION_STATE Execute(float deltaTime, Game* game);
-	virtual void Exit(Game* game);
+	MetaAISequence() {}
+	virtual ~MetaAISequence();
+	virtual void Enter(class Game* game);
+	virtual bool Execute(float deltaTime, class Game* game);
+	virtual void Exit(class Game* game);
 private:
 };
 

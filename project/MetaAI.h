@@ -7,22 +7,24 @@
 // ----------------------------------------------------------------
 
 #pragma once
+
 #include <vector>
 #include "Math.h"
 #include "Actor.h"
 #include <cstdint>
+#include "MetaAISequence.h"
+#include "IncreaseEnemySequence.h"
 
 
+#define MAX_ASTEROID_NUM (30)
+#define BORDER_ASTEROID_NUM (5)
+#define MAX_CREATE_ASTEROID_INTERVAL (2.0f)
+#define INCREASE_CREATE_ASTEROID_STEP (0.1f) 
+#define MIN_CREATE_ASTEROID_INTERVAL (0.1f)
 
 class MetaAI
 {
 public:
-
-    #define MAX_ASTEROID_NUM (30)
-    #define BORDER_ASTEROID_NUM (5)
-    #define MAX_CREATE_ASTEROID_INTERVAL (2.0f)
-    #define INCREASE_CREATE_ASTEROID_STEP (0.1f) 
-    #define MIN_CREATE_ASTEROID_INTERVAL (0.1f)
 
 	enum class PLAYER_EMOTION_STATE{
 		INCREASE_ENEMY,
@@ -46,4 +48,7 @@ private:
 	float mCreateAsteroidInterval;
 	float mCreateAsteroidIntervalStep;
 	PLAYER_EMOTION_STATE mState;
+
+	MetaAISequence* mSequence;
+	IncreaseEnemySequence* mIncreaseEnemySequence;
 };

@@ -33,7 +33,7 @@ EnemyShip::EnemyShip(Game* game)
 	mCircle = new CircleComponent(this);
 	mCircle->SetRadius(40.0f);
 
-	SetTeam(EEnemy);
+	SetTeam(Team::EEnemy);
 }
 
 EnemyShip::~EnemyShip()

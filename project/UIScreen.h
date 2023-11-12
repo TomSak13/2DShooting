@@ -55,7 +55,7 @@ public:
 	virtual void ProcessInput(const uint8_t* keys);
 	virtual void HandleKeyPress(int key);
 	// Tracks if the UI is active or closing
-	enum UIState
+	enum class UIState
 	{
 		EActive,
 		EClosing

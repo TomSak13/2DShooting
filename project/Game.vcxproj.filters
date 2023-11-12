@@ -124,6 +124,9 @@
     <ClCompile Include="InputSystem.cpp">
       <Filter>Source Files\Input</Filter>
     </ClCompile>
+    <ClCompile Include="MetaAISequence.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -215,6 +218,9 @@
     </ClInclude>
     <ClInclude Include="InputSystem.h">
       <Filter>Source Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="MetaAISequence.h">
+      <Filter>Source Files\AI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

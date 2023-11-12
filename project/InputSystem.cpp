@@ -29,13 +29,13 @@ void InputSystem::ProcessInput(Game* game)
 		switch (event.type)
 		{
 		case SDL_QUIT:
-			game->SetState(Game::EQuit);
+			game->SetState(Game::GameState::EQuit);
 			break;
 		case SDL_KEYDOWN:
 			if (!event.key.repeat)
 			{
 				// UI‚É“ü—Í‚ð“n‚·‚©AƒQ[ƒ€“à‚É“ü—Í‚ð“n‚·‚©‚ðƒXƒe[ƒg‚Å”»’f
-				if (game->GetState() == Game::EGameplay)
+				if (game->GetState() == Game::GameState::EGameplay)
 				{
 					//HandleKeyPress(event.key.keysym.sym);
 					if (event.key.keysym.sym == SDLK_ESCAPE)
@@ -65,7 +65,7 @@ void InputSystem::ProcessInput(Game* game)
 	const Uint8* keyState = SDL_GetKeyboardState(NULL);
 
 
-	if (game->GetState() == Game::EGameplay)
+	if (game->GetState() == Game::GameState::EGameplay)
 	{
 		game->SetUpdatingActors(true);
 		std::vector<class Actor*> Actors = game->GetActors();

@@ -14,8 +14,8 @@
 #include <algorithm>
 
 Actor::Actor(Game* game)
-	:mState(EActive)
-	, mTeam(ENone)
+	:mState(State::EActive)
+	,mTeam(Team::ENone)
 	,mPosition(Vector2::Zero)
 	,mScale(1.0f)
 	,mRotation(0.0f)
@@ -38,7 +38,7 @@ Actor::~Actor()
 
 void Actor::Update(float deltaTime)
 {
-	if (mState == EActive)
+	if (mState == State::EActive)
 	{
 		ComputeWorldTransform();
 
@@ -63,7 +63,7 @@ void Actor::UpdateActor(float deltaTime)
 
 void Actor::ProcessInput(const uint8_t* keyState)
 {
-	if (mState == EActive)
+	if (mState == State::EActive)
 	{
 		// First process input for components
 		for (auto comp : mComponents)

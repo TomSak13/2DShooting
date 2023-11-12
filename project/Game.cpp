@@ -38,8 +38,12 @@
 
 Game::Game()
 :mRenderer(nullptr)
-,mGameState(EStart)
+,mGameState(GameState::EStart)
 ,mUpdatingActors(false)
+,mCollisionBroker(nullptr)
+,mEnemyShip(nullptr)
+,mHUD(nullptr)
+,mShip(nullptr)
 ,mPlayerDestroyAsteroid(0)
 ,mPlayerDestroyShip(0)
 {
@@ -57,7 +61,7 @@ bool Game::Initialize(Renderer* renderer)
 
 void Game::UpdateGame(float deltaTime)
 {
-	if (mGameState == EGameplay)
+	if (mGameState == GameState::EGameplay)
 	{
 		// Update all actors
 		mUpdatingActors = true;
@@ -81,7 +85,7 @@ void Game::UpdateGame(float deltaTime)
 		std::vector<Actor*> deadActors;
 		for (auto actor : mActors)
 		{
-			if (actor->GetState() == Actor::EDead)
+			if (actor->GetState() == Actor::State::EDead)
 			{
 				deadActors.emplace_back(actor);
 			}
@@ -103,7 +107,7 @@ void Game::UpdateGame(float deltaTime)
 	// Update UI screens(スタックされたUIを更新)
 	for (auto ui : mUIStack)
 	{
-		if (ui->GetState() == UIScreen::EActive)
+		if (ui->GetState() == UIScreen::UIState::EActive)
 		{
 			ui->Update(deltaTime);
 		}
@@ -112,7 +116,7 @@ void Game::UpdateGame(float deltaTime)
 	auto iter = mUIStack.begin();
 	while (iter != mUIStack.end())
 	{
-		if ((*iter)->GetState() == UIScreen::EClosing)
+		if ((*iter)->GetState() == UIScreen::UIState::EClosing)
 		{
 			delete* iter;
 			iter = mUIStack.erase(iter);

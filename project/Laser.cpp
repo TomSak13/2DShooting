@@ -54,6 +54,6 @@ void Laser::UpdateActor(float deltaTime)
 	mDeathTimer -= deltaTime;
 	if (mDeathTimer <= 0.0f || IsOutFrame())
 	{
-		SetState(EDead);
+		SetState(State::EDead);
 	}
 }

@@ -55,7 +55,7 @@ void Asteroid::UpdateActor(float deltaTime)
 {
 	if (IsOutFrame())
 	{
-		SetState(EDead);
+		SetState(State::EDead);
 	}
 
 	return;

@@ -16,13 +16,13 @@
 class Actor
 {
 public:
-	enum Team
+	enum class Team
 	{
 		ENone = 0,
 		EPlayer,
 		EEnemy
 	};
-	enum State
+	enum class State
 	{
 		EActive,
 		EPaused,

@@ -39,7 +39,7 @@ bool LaserCollision::HandleCollision(Game* game)
 	}
 
 	/* “G‚ÌLaser‚Íasteroid‚ÆÚG”»’è‚Í–³‚µ */
-	if (mCollideLaser->GetTeam() == Actor::EPlayer)
+	if (mCollideLaser->GetTeam() == Actor::Team::EPlayer)
 	{
 		for (auto ast : game->GetAsteroids())
 		{
@@ -48,8 +48,8 @@ bool LaserCollision::HandleCollision(Game* game)
 				// The first asteroid we intersect with,
 				// set ourselves and the asteroid to dead
 				game->IncrementPlayerDestroyAsteroid();
-				mCollideLaser->SetState(Actor::EDead);
-				ast->SetState(Actor::EDead);
+				mCollideLaser->SetState(Actor::State::EDead);
+				ast->SetState(Actor::State::EDead);
 				return true;
 			}
 		}
@@ -59,16 +59,16 @@ bool LaserCollision::HandleCollision(Game* game)
 	class Ship* playerShip = game->GetPlayerShip();
 	if (playerShip != NULL)
 	{
-		if (playerShip->GetState() != Actor::EDead && playerShip->GetTeam() != mCollideLaser->GetTeam())
+		if (playerShip->GetState() != Actor::State::EDead && playerShip->GetTeam() != mCollideLaser->GetTeam())
 		{
 			if (Intersect(*(mCollideLaser->GetCircle()), *(playerShip->GetCircle())))
 			{
-				mCollideLaser->SetState(Actor::EDead);
+				mCollideLaser->SetState(Actor::State::EDead);
 
 				playerShip->ReceiveDamage(1);
 				if (playerShip->GetHp() <= 0)
 				{
-					playerShip->SetState(Actor::EDead);
+					playerShip->SetState(Actor::State::EDead);
 				}
 
 				return true;
@@ -78,16 +78,16 @@ bool LaserCollision::HandleCollision(Game* game)
 	class EnemyShip* enemyShip = game->GetEnemyShip();
 	if (enemyShip != NULL)
 	{
-		if (enemyShip->GetState() != Actor::EDead && enemyShip->GetTeam() != mCollideLaser->GetTeam())
+		if (enemyShip->GetState() != Actor::State::EDead && enemyShip->GetTeam() != mCollideLaser->GetTeam())
 		{
 			if (Intersect(*(mCollideLaser->GetCircle()), *(enemyShip->GetCircle())))
 			{
-				mCollideLaser->SetState(Actor::EDead);
+				mCollideLaser->SetState(Actor::State::EDead);
 
 				enemyShip->ReceiveDamage(50);
 				if (enemyShip->GetHp() <= 0)
 				{
-					enemyShip->SetState(Actor::EDead);
+					enemyShip->SetState(Actor::State::EDead);
 				}
 
 				return true;

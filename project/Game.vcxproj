@@ -31,6 +31,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="MetaAI.cpp" />
+    <ClCompile Include="MetaAISequence.cpp" />
     <ClCompile Include="MoveComponent.cpp" />
     <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="Random.cpp" />
@@ -63,6 +64,7 @@
     <ClInclude Include="LaserCollision.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="MetaAI.h" />
+    <ClInclude Include="MetaAISequence.h" />
     <ClInclude Include="MoveComponent.h" />
     <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="Random.h" />

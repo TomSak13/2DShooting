@@ -13,18 +13,18 @@
 GameOverMenu::GameOverMenu(Game* game)
 	:UIScreen(game)
 {
-	mGame->SetState(Game::EPaused);
+	mGame->SetState(Game::GameState::EPaused);
 	SetRelativeMouseMode(false);
 	SetTitle("GAME OVER");
 	AddButton("QuitButton", [this]() { 
-				mGame->SetState(Game::EQuit);
+				mGame->SetState(Game::GameState::EQuit);
 	}); // ƒ‰ƒ€ƒ_Ž®ŠÖ”‚Å’Ç‰Á
 }
 
 GameOverMenu::~GameOverMenu()
 {
 	SetRelativeMouseMode(true);
-	mGame->SetState(Game::EGameplay);
+	mGame->SetState(Game::GameState::EGameplay);
 }
 
 void GameOverMenu::HandleKeyPress(int key)

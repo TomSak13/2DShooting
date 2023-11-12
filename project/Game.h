@@ -21,7 +21,7 @@
 class Game
 {
 public:
-	enum GameState
+	enum class GameState
 	{
 		EStart,
 		EGameplay,

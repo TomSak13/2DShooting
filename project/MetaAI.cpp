@@ -68,7 +68,7 @@ void MetaAI::IncreaseEnemy(float deltaTime, Game* game, int asteroidCount)
 	/* state check */
 	if (mCreateAsteroidIntervalStep <= MIN_CREATE_ASTEROID_INTERVAL)
 	{
-		mState = RUSH;
+		mState = PLAYER_EMOTION_STATE::RUSH;
 	}
 }
 
@@ -95,13 +95,13 @@ void MetaAI::Update(float deltaTime, Game* game)
 
 	switch (mState)
 	{
-	    case INCREASE_ENEMY:
+	    case PLAYER_EMOTION_STATE::INCREASE_ENEMY:
 			IncreaseEnemy(deltaTime, game, asteroidList.size());
 		    break;
-		case RUSH:
+	    case PLAYER_EMOTION_STATE::RUSH:
 			Rush(deltaTime, game, asteroidList.size());
 			break;
-		case RELAX:
+	    case PLAYER_EMOTION_STATE::RELAX:
 			break;
 		default:
 			break;

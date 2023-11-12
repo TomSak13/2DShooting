@@ -70,7 +70,7 @@ int main(int argc, char** argv)
 		// XV
 		metaAI.Update(deltaTime, &game);
 		game.UpdateGame(deltaTime);
-		if (game.GetState() == Game::EQuit)
+		if (game.GetState() == Game::GameState::EQuit)
 		{
 			break;
 		}

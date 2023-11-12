@@ -12,21 +12,21 @@
 TitleMenu::TitleMenu(Game* game)
 	:UIScreen(game)
 {
-	mGame->SetState(Game::EPaused);
+	mGame->SetState(Game::GameState::EPaused);
 	SetRelativeMouseMode(false);
 	SetTitle("Shooting Demo");
 	AddButton("Game Start", [this]() {
 		Close();
 	});// ƒ‰ƒ€ƒ_Ž®ŠÖ”‚Å’Ç‰Á
 	AddButton("Quit", [this]() { 
-		mGame->SetState(Game::EQuit);
+		mGame->SetState(Game::GameState::EQuit);
 	}); // ƒ‰ƒ€ƒ_Ž®ŠÖ”‚Å’Ç‰Á
 }
 
 TitleMenu::~TitleMenu()
 {
 	SetRelativeMouseMode(true);
-	mGame->SetState(Game::EGameplay);
+	mGame->SetState(Game::GameState::EGameplay);
 }
 
 void TitleMenu::HandleKeyPress(int key)

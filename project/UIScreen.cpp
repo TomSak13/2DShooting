@@ -20,7 +20,7 @@ UIScreen::UIScreen(Game* game)
 	,mTitlePos(0.0f, 300.0f)
 	,mNextButtonPos(0.0f, 200.0f)
 	,mBGPos(0.0f, 250.0f)
-	,mState(EActive)
+	,mState(UIState::EActive)
 {
 	// Add to UI Stack
 	mGame->PushUI(this); // UIの階層に作成したUIをスタックする(作成した順にスタックされていく)
@@ -125,7 +125,7 @@ void UIScreen::HandleKeyPress(int key)
 
 void UIScreen::Close()
 {
-	mState = EClosing;
+	mState = UIState::EClosing;
 }
 
 void UIScreen::SetTitle(const std::string& text,

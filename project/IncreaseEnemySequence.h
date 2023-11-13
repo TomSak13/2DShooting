@@ -17,7 +17,7 @@ public:
 
 	void Enter(Game* game) override;
 	bool Execute(float deltaTime, Game* game) override;
-	void Exit(Game* game) override;
+	PLAYER_EMOTION_STATE Exit(Game* game) override;
 private:
 	float mCreateAsteroidInterval;
 	float mCreateAsteroidIntervalStep;

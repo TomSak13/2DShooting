@@ -36,7 +36,9 @@
     <ClCompile Include="MoveComponent.cpp" />
     <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="Random.cpp" />
+    <ClCompile Include="RelaxSequence.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="RushSequence.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Ship.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
@@ -70,7 +72,9 @@
     <ClInclude Include="MoveComponent.h" />
     <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="Random.h" />
+    <ClInclude Include="RelaxSequence.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="RushSequence.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Ship.h" />
     <ClInclude Include="SpriteComponent.h" />

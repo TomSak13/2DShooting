@@ -69,7 +69,7 @@ bool IncreaseEnemySequence::Execute(float deltaTime, Game* game)
 	return false;
 }
 
-void IncreaseEnemySequence::Exit(Game* game)
+PLAYER_EMOTION_STATE IncreaseEnemySequence::Exit(Game* game)
 {
-
+	return PLAYER_EMOTION_STATE::RUSH;
 }

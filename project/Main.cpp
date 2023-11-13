@@ -53,7 +53,7 @@ int main(int argc, char** argv)
 		SDL_Log("Failed to initialize game");
 		return -1;
 	}
-	metaAI.Initialize();
+	metaAI.Initialize(&game);
 
 	tickCount = SDL_GetTicks();
 	game.LoadData();

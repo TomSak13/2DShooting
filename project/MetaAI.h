@@ -13,7 +13,6 @@
 #include "Actor.h"
 #include <cstdint>
 #include "MetaAISequence.h"
-#include "IncreaseEnemySequence.h"
 
 
 #define MAX_ASTEROID_NUM (30)
@@ -26,16 +25,10 @@ class MetaAI
 {
 public:
 
-	enum class PLAYER_EMOTION_STATE{
-		INCREASE_ENEMY,
-		RUSH,
-		RELAX,
-	};
-
 	MetaAI();
 	MetaAI::~MetaAI();
 
-	void Initialize();
+	void Initialize(Game* game);
 
 	void Update(float deltaTime, class Game* game);
 
@@ -50,5 +43,4 @@ private:
 	PLAYER_EMOTION_STATE mState;
 
 	MetaAISequence* mSequence;
-	IncreaseEnemySequence* mIncreaseEnemySequence;
 };

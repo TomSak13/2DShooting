@@ -5,24 +5,32 @@
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
 
-#include "MetaAISequence.h"
+#include "RelaxSequence.h"
+#include "Asteroid.h"
+#include "Random.h"
+#include "MetaAI.h"
 
-MetaAISequence::~MetaAISequence()
+RelaxSequence::RelaxSequence()
 {
 
 }
 
-void MetaAISequence::Enter(Game* game)
+RelaxSequence::~RelaxSequence()
 {
 
 }
 
-bool MetaAISequence::Execute(float deltaTime, Game* game)
+void RelaxSequence::Enter(Game* game)
+{
+	
+}
+
+bool RelaxSequence::Execute(float deltaTime, Game* game)
 {
 	return true;
 }
 
-PLAYER_EMOTION_STATE MetaAISequence::Exit(Game* game)
+PLAYER_EMOTION_STATE RelaxSequence::Exit(Game* game)
 {
 	return PLAYER_EMOTION_STATE::INCREASE_ENEMY;
 }

@@ -4,25 +4,21 @@
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
+#pragma once
 
+#include "Game.h"
 #include "MetaAISequence.h"
 
-MetaAISequence::~MetaAISequence()
+class RelaxSequence : public MetaAISequence
 {
+public:
+	RelaxSequence();
+	~RelaxSequence();
 
-}
+	void Enter(Game* game) override;
+	bool Execute(float deltaTime, Game* game) override;
+	PLAYER_EMOTION_STATE Exit(Game* game) override;
+private:
 
-void MetaAISequence::Enter(Game* game)
-{
+};
 
-}
-
-bool MetaAISequence::Execute(float deltaTime, Game* game)
-{
-	return true;
-}
-
-PLAYER_EMOTION_STATE MetaAISequence::Exit(Game* game)
-{
-	return PLAYER_EMOTION_STATE::INCREASE_ENEMY;
-}

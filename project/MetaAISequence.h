@@ -6,6 +6,12 @@
 // ----------------------------------------------------------------
 #pragma once
 
+enum class PLAYER_EMOTION_STATE {
+	INCREASE_ENEMY = 0,
+	RUSH,
+	RELAX,
+};
+
 class MetaAISequence
 {
 public:
@@ -13,7 +19,7 @@ public:
 	virtual ~MetaAISequence();
 	virtual void Enter(class Game* game);
 	virtual bool Execute(float deltaTime, class Game* game);
-	virtual void Exit(class Game* game);
+	virtual PLAYER_EMOTION_STATE Exit(class Game* game);
 private:
 };
 

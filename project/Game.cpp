@@ -41,7 +41,6 @@ Game::Game()
 ,mGameState(GameState::EStart)
 ,mUpdatingActors(false)
 ,mCollisionBroker(nullptr)
-,mEnemyShip(nullptr)
 ,mHUD(nullptr)
 ,mShip(nullptr)
 ,mPlayerDestroyAsteroid(0)
@@ -194,12 +193,19 @@ void Game::RemoveAsteroid(Asteroid* ast)
 	}
 }
 
-void Game::CreateEnemyShip()
+void Game::AddEnemyShip(class EnemyShip* enemyShip)
 {
-	// Create enemy's ship
-	mEnemyShip = new EnemyShip(this);
-	mEnemyShip->SetPosition(Vector2(0.0f, FIELD_LENGTH));
-	mEnemyShip->SetRotation(Math::PiOver2 * -1);
+	mEnemyShips.emplace_back(enemyShip);
+}
+
+void Game::RemoveEnemyShip(class EnemyShip* enemyShip)
+{
+	auto iter = std::find(mEnemyShips.begin(),
+		mEnemyShips.end(), enemyShip);
+	if (iter != mEnemyShips.end())
+	{
+		mEnemyShips.erase(iter);
+	}
 }
 
 void Game::Shutdown()

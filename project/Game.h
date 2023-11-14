@@ -46,10 +46,10 @@ public:
 	void RemoveAsteroid(class Asteroid* ast);
 	std::vector<class Asteroid*>& GetAsteroids() { return mAsteroids; }
 	class Ship* GetPlayerShip() { return mShip; }
-	class EnemyShip* GetEnemyShip() { return mEnemyShip; }
+	std::vector<class EnemyShip*>& GetEnemyShips() { return mEnemyShips; }
 	void SetPlayerShip(class Ship* ship) { mShip = ship; }
-	void CreateEnemyShip();
-	void SetEnemyShip(class EnemyShip* enemyShip) { mEnemyShip = enemyShip; }
+	void AddEnemyShip(class EnemyShip* enemyShip);
+	void RemoveEnemyShip(class EnemyShip* enemyShip);
 
 	const std::vector<class UIScreen*>& GetUIStack() { return mUIStack; }
 	void PushUI(class UIScreen* screen);
@@ -90,7 +90,7 @@ private:
 	bool mUpdatingActors;
 
 	class Ship* mShip; // Player's ship
-	class EnemyShip* mEnemyShip;
+	std::vector<class EnemyShip*> mEnemyShips;
 	std::vector<class Asteroid*> mAsteroids;
 
 	std::vector<class UIScreen*> mUIStack;

@@ -9,6 +9,7 @@
 #include "Asteroid.h"
 #include "Random.h"
 #include "MetaAI.h"
+#include "EnemyShip.h"
 
 IncreaseEnemySequence::IncreaseEnemySequence()
 : mCreateAsteroidInterval(MAX_CREATE_ASTEROID_INTERVAL),
@@ -31,12 +32,18 @@ void IncreaseEnemySequence::Enter(Game* game)
 bool IncreaseEnemySequence::Execute(float deltaTime, Game* game)
 {
 	int asteroidCount = game->GetAsteroids().size();
+	int enemyShipCount = game->GetEnemyShips().size();
 
 	/* create boss */
+	/* このフェーズでは敵は一機 */
 	if (game->GetPlayerDestroyAsteroid() > 0 && game->GetPlayerDestroyAsteroid() % 5 == 0
-		&& game->GetEnemyShip() == NULL)
+		&& enemyShipCount < 1)
 	{
-		game->CreateEnemyShip();
+		EnemyShip* enemyShip = new EnemyShip(game);
+		Vector2 randPos = Random::GetVector(Vector2(FIELD_WIDTH * -1, FIELD_LENGTH),
+			Vector2(FIELD_WIDTH, FIELD_LENGTH));
+		enemyShip->SetPosition(randPos);
+		enemyShip->SetRotation(Math::PiOver2 * -1);
 	}
 
 	/* create asteroid */

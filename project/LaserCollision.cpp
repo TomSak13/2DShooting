@@ -75,8 +75,8 @@ bool LaserCollision::HandleCollision(Game* game)
 			}
 		}
 	}
-	class EnemyShip* enemyShip = game->GetEnemyShip();
-	if (enemyShip != NULL)
+
+	for (auto enemyShip : game->GetEnemyShips())
 	{
 		if (enemyShip->GetState() != Actor::State::EDead && enemyShip->GetTeam() != mCollideLaser->GetTeam())
 		{

@@ -34,11 +34,13 @@ EnemyShip::EnemyShip(Game* game)
 	mCircle->SetRadius(40.0f);
 
 	SetTeam(Team::EEnemy);
+
+	GetGame()->AddEnemyShip(this);
 }
 
 EnemyShip::~EnemyShip()
 {
-	GetGame()->SetEnemyShip(NULL);
+	GetGame()->RemoveEnemyShip(this);
 	GetGame()->IncrementPlayerDestroyShip();
 }
 

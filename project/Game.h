@@ -18,6 +18,8 @@
 #define FIELD_WIDTH (512.0f)
 #define FIELD_LENGTH (384.0f)
 
+#define GAME_DEBUG_NO_DAMAGE_MODE (0)
+
 class Game
 {
 public:

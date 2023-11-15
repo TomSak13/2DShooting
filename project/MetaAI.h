@@ -16,7 +16,7 @@
 
 /* í≤êÆçœÇ›ÉpÉâÉÅÅ[É^ */
 #define MAX_ASTEROID_NUM (20)
-#define MAX_ENEMY_SHIP_NUM  (5)
+#define MAX_ENEMY_SHIP_NUM  (3)
 #define BORDER_ASTEROID_NUM (5)
 #define MAX_CREATE_ASTEROID_INTERVAL (1.0f)
 #define INCREASE_CREATE_ASTEROID_STEP (0.01f) 

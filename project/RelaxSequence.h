@@ -19,6 +19,7 @@ public:
 	bool Execute(float deltaTime, Game* game) override;
 	PLAYER_EMOTION_STATE Exit(Game* game) override;
 private:
-
+	int mMaxAsteroidNum;
+	float mCreateAsteroidInterval;
 };
 

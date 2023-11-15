@@ -13,7 +13,7 @@
 class EnemyShip : public Actor
 {
 public:
-	const int MaxHp = 100;
+	const int MaxHp = 3;
 
 	EnemyShip(class Game* game);
 	EnemyShip::~EnemyShip();

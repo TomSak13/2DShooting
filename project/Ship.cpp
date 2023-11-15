@@ -53,6 +53,7 @@ Ship::~Ship()
 
 void Ship::ReceiveDamage(int damage)
 {
+#if GAME_DEBUG_MODE != 1
 	for (int i = 0; i < damage; i++)
 	{
 		mHp--;
@@ -62,6 +63,7 @@ void Ship::ReceiveDamage(int damage)
 	{
 		mHp = 0;
 	}
+#endif
 }
 
 void Ship::UpdateActor(float deltaTime)

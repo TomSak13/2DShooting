@@ -84,7 +84,7 @@ bool LaserCollision::HandleCollision(Game* game)
 			{
 				mCollideLaser->SetState(Actor::State::EDead);
 
-				enemyShip->ReceiveDamage(50);
+				enemyShip->ReceiveDamage(1);
 				if (enemyShip->GetHp() <= 0)
 				{
 					enemyShip->SetState(Actor::State::EDead);

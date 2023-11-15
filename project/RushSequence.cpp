@@ -13,6 +13,7 @@
 #include "EnemyShip.h"
 
 RushSequence::RushSequence()
+	: mCreateInterval(0)
 {
 
 }
@@ -24,13 +25,24 @@ RushSequence::~RushSequence()
 
 void RushSequence::Enter(Game* game)
 {
-	
+	mCreateInterval = MAX_CREATE_ASTEROID_INTERVAL / 2;
 }
 
 bool RushSequence::Execute(float deltaTime, Game* game)
 {
 	int asteroidCount = game->GetAsteroids().size();
 	int enemyShipCount = game->GetEnemyShips().size();
+
+	/* ¶¬‚Í0.5•bŠÔŠu‚ÅŒÅ’è */
+	mCreateInterval -= deltaTime;
+	if (mCreateInterval > 0)
+	{
+		return false;
+	}
+	else
+	{
+		mCreateInterval = MAX_CREATE_ASTEROID_INTERVAL / 2;
+	}
 
 	/* ƒ{ƒX‚ðŒÜ‘Ì”j‰ó‚µ‚½‚çƒ‰ƒbƒVƒ…C—¹ */
 	if (game->GetPlayerDestroyShip() > 5)

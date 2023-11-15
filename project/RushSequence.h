@@ -19,7 +19,6 @@ public:
 	bool Execute(float deltaTime, Game* game) override;
 	PLAYER_EMOTION_STATE Exit(Game* game) override;
 private:
-	float mRushTime;
-
+	float mCreateInterval;
 };
 

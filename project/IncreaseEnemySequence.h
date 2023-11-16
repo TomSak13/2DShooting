@@ -6,7 +6,6 @@
 // ----------------------------------------------------------------
 #pragma once
 
-#include "Game.h"
 #include "MetaAISequence.h"
 
 class IncreaseEnemySequence : public MetaAISequence
@@ -15,10 +14,12 @@ public:
 	IncreaseEnemySequence();
 	~IncreaseEnemySequence();
 
-	void Enter(Game* game) override;
-	bool Execute(float deltaTime, Game* game) override;
-	PLAYER_EMOTION_STATE Exit(Game* game) override;
+	void Enter(class Game* game) override;
+	bool Execute(float deltaTime, class Game* game, class SpawnEnemy* spawnEnemy) override;
+	PLAYER_EMOTION_STATE Exit(class Game* game) override;
 private:
+	bool IsSpawnTime(float deltaTime);
+	void CalcNextSpawnTime();
 	float mCreateAsteroidInterval;
 	float mCreateAsteroidIntervalStep;
 };

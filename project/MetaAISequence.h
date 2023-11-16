@@ -18,7 +18,7 @@ public:
 	MetaAISequence() {}
 	virtual ~MetaAISequence();
 	virtual void Enter(class Game* game);
-	virtual bool Execute(float deltaTime, class Game* game);
+	virtual bool Execute(float deltaTime, class Game* game, class SpawnEnemy* spawnEnemy);
 	virtual PLAYER_EMOTION_STATE Exit(class Game* game);
 private:
 };

@@ -5,7 +5,9 @@
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
 
+#include "Game.h"
 #include "RelaxSequence.h"
+#include "SpawnEnemy.h"
 #include "Asteroid.h"
 #include "Random.h"
 #include "MetaAI.h"
@@ -28,37 +30,27 @@ void RelaxSequence::Enter(Game* game)
 	mCreateAsteroidInterval = MAX_CREATE_ASTEROID_INTERVAL / 2;
 }
 
-bool RelaxSequence::Execute(float deltaTime, Game* game)
+bool RelaxSequence::Execute(float deltaTime, Game* game, SpawnEnemy* spawnEnemy)
 {
 	int asteroidCount = game->GetAsteroids().size();
 
 	/* ¶¬ŠÔŠu‚ðL‚Î‚µ‚Ä‚¢‚­ */
-	mCreateAsteroidInterval -= deltaTime;
-	if (mCreateAsteroidInterval > 0)
+	if (!IsSpawnTime(deltaTime))
 	{
 		return false;
 	}
-	else
-	{
-		mCreateAsteroidInterval += INCREASE_CREATE_ASTEROID_STEP;
-		if (mCreateAsteroidInterval >= MAX_CREATE_ASTEROID_INTERVAL)
-		{
-			mCreateAsteroidInterval = MAX_CREATE_ASTEROID_INTERVAL;
-		}
-	}
+	CalcNextSpawnTime();
 
+	/* create asteroid */
 	if (asteroidCount <= mMaxAsteroidNum)
 	{
-		Asteroid* asteroid = new Asteroid(game);
-
-		Vector2 randPos = Random::GetVector(Vector2(FIELD_WIDTH * -1, FIELD_LENGTH),
-			Vector2(FIELD_WIDTH, FIELD_LENGTH));
-		asteroid->SetPosition(randPos);
+		spawnEnemy->SpawnAsteroid(game);
 
 		mMaxAsteroidNum--;
 	}
 
-	if (mMaxAsteroidNum <= BORDER_ASTEROID_NUM)
+	/* state check */
+	if (mCreateAsteroidInterval >= MAX_CREATE_ASTEROID_INTERVAL)
 	{
 		return true;
 	}
@@ -69,4 +61,25 @@ bool RelaxSequence::Execute(float deltaTime, Game* game)
 PLAYER_EMOTION_STATE RelaxSequence::Exit(Game* game)
 {
 	return PLAYER_EMOTION_STATE::INCREASE_ENEMY;
+}
+
+bool RelaxSequence::IsSpawnTime(float deltaTime)
+{
+	mCreateAsteroidInterval -= deltaTime;
+	if (mCreateAsteroidInterval <= 0.0f)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+
+void RelaxSequence::CalcNextSpawnTime()
+{
+	mCreateAsteroidInterval += INCREASE_CREATE_ASTEROID_STEP;
+	if (mCreateAsteroidInterval >= MAX_CREATE_ASTEROID_INTERVAL)
+	{
+		mCreateAsteroidInterval = MAX_CREATE_ASTEROID_INTERVAL;
+	}
 }

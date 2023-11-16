@@ -41,6 +41,7 @@
     <ClCompile Include="RushSequence.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Ship.cpp" />
+    <ClCompile Include="SpawnEnemy.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TitleMenu.cpp" />
@@ -77,6 +78,7 @@
     <ClInclude Include="RushSequence.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Ship.h" />
+    <ClInclude Include="SpawnEnemy.h" />
     <ClInclude Include="SpriteComponent.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TitleMenu.h" />

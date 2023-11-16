@@ -5,11 +5,13 @@
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
 
+#include "Game.h"
 #include "IncreaseEnemySequence.h"
 #include "Asteroid.h"
 #include "Random.h"
 #include "MetaAI.h"
 #include "EnemyShip.h"
+#include "SpawnEnemy.h"
 
 IncreaseEnemySequence::IncreaseEnemySequence()
 : mCreateAsteroidInterval(MAX_CREATE_ASTEROID_INTERVAL),
@@ -29,42 +31,31 @@ void IncreaseEnemySequence::Enter(Game* game)
 	mCreateAsteroidIntervalStep = MAX_CREATE_ASTEROID_INTERVAL;
 }
 
-bool IncreaseEnemySequence::Execute(float deltaTime, Game* game)
+bool IncreaseEnemySequence::Execute(float deltaTime, Game* game, SpawnEnemy* spawnEnemy)
 {
 	int asteroidCount = game->GetAsteroids().size();
 	int enemyShipCount = game->GetEnemyShips().size();
+
+	if (!IsSpawnTime(deltaTime)) {
+		
+		return false;
+	}
+	/* ¶¬ŠÔŠuŒvŽZBŠÔŠu‚Í’iX‚Æ‹·‚ß‚Ä‚¢‚­ */
+	CalcNextSpawnTime();
 
 	/* create boss */
 	/* ‚±‚ÌƒtƒF[ƒY‚Å‚Í“G‚Íˆê‹@ */
 	if (game->GetPlayerDestroyAsteroid() > 0 && game->GetPlayerDestroyAsteroid() % 5 == 0
 		&& enemyShipCount < 1)
 	{
-		EnemyShip* enemyShip = new EnemyShip(game);
-		Vector2 randPos = Random::GetVector(Vector2(FIELD_WIDTH * -1, FIELD_LENGTH),
-			Vector2(FIELD_WIDTH, FIELD_LENGTH));
-		enemyShip->SetPosition(randPos);
-		enemyShip->SetRotation(Math::PiOver2 * -1);
+		spawnEnemy->SpawnEnemyShip(game);
 	}
 
 	/* create asteroid */
 	if (asteroidCount < MAX_ASTEROID_NUM)
 	{
-		/* ¶¬ŠÔŠu‚ð‹·‚ß‚È‚ª‚ç‘‚â‚µ‚Ä‚¢‚­ */
-		mCreateAsteroidInterval -= deltaTime;
-		if (mCreateAsteroidInterval <= 0.0f)
-		{
-			Asteroid* asteroid = new Asteroid(game);
-
-			Vector2 randPos = Random::GetVector(Vector2(FIELD_WIDTH * -1, FIELD_LENGTH),
-				Vector2(FIELD_WIDTH, FIELD_LENGTH));
-			asteroid->SetPosition(randPos);
-
-			if (mCreateAsteroidIntervalStep > MIN_CREATE_ASTEROID_INTERVAL) {
-				mCreateAsteroidIntervalStep -= INCREASE_CREATE_ASTEROID_STEP;
-			}
-
-			mCreateAsteroidInterval = mCreateAsteroidIntervalStep;
-		}
+		
+		spawnEnemy->SpawnAsteroid(game);
 	}
 
 	/* state check */
@@ -79,4 +70,25 @@ bool IncreaseEnemySequence::Execute(float deltaTime, Game* game)
 PLAYER_EMOTION_STATE IncreaseEnemySequence::Exit(Game* game)
 {
 	return PLAYER_EMOTION_STATE::RUSH;
+}
+
+bool IncreaseEnemySequence::IsSpawnTime(float deltaTime)
+{
+	mCreateAsteroidInterval -= deltaTime;
+	if (mCreateAsteroidInterval <= 0.0f)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+
+void IncreaseEnemySequence::CalcNextSpawnTime()
+{
+	if (mCreateAsteroidIntervalStep > MIN_CREATE_ASTEROID_INTERVAL) {
+		mCreateAsteroidIntervalStep -= INCREASE_CREATE_ASTEROID_STEP;
+	}
+
+	mCreateAsteroidInterval = mCreateAsteroidIntervalStep;
 }

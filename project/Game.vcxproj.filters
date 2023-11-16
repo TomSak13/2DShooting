@@ -136,6 +136,9 @@
     <ClCompile Include="RelaxSequence.cpp">
       <Filter>Source Files\AI</Filter>
     </ClCompile>
+    <ClCompile Include="SpawnEnemy.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -238,6 +241,9 @@
       <Filter>Source Files\AI</Filter>
     </ClInclude>
     <ClInclude Include="RelaxSequence.h">
+      <Filter>Source Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="SpawnEnemy.h">
       <Filter>Source Files\AI</Filter>
     </ClInclude>
   </ItemGroup>

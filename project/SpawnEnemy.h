@@ -14,28 +14,19 @@
 #include <cstdint>
 #include "MetaAISequence.h"
 
-/* í≤êÆçœÇ›ÉpÉâÉÅÅ[É^ */
-#define MAX_ASTEROID_NUM (20)
-#define MAX_ENEMY_SHIP_NUM  (3)
-#define BORDER_ASTEROID_NUM (5)
-#define MAX_CREATE_ASTEROID_INTERVAL (1.0f)
-#define INCREASE_CREATE_ASTEROID_STEP (0.01f) 
-#define MIN_CREATE_ASTEROID_INTERVAL (0.5f)
 
-class MetaAI
+class SpawnEnemy
 {
 public:
-	MetaAI();
-	~MetaAI();
+
+	SpawnEnemy();
+	~SpawnEnemy();
 
 	void Initialize(class Game* game);
 
-	void Update(float deltaTime, class Game* game);
+	void SpawnAsteroid(class Game* game);
+	void SpawnEnemyShip(class Game* game);
 
 private:
-	PLAYER_EMOTION_STATE mState;
 	
-	MetaAISequence* mSequence;
-
-	class SpawnEnemy* mSpawnEnemy;
 };

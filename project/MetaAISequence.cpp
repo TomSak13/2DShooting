@@ -6,6 +6,8 @@
 // ----------------------------------------------------------------
 
 #include "MetaAISequence.h"
+#include "Game.h"
+#include "SpawnEnemy.h"
 
 MetaAISequence::~MetaAISequence()
 {
@@ -17,7 +19,7 @@ void MetaAISequence::Enter(Game* game)
 
 }
 
-bool MetaAISequence::Execute(float deltaTime, Game* game)
+bool MetaAISequence::Execute(float deltaTime, Game* game, SpawnEnemy* spawnEnemy)
 {
 	return true;
 }

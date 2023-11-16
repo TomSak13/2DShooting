@@ -53,7 +53,7 @@ Ship::~Ship()
 
 void Ship::ReceiveDamage(int damage)
 {
-#if GAME_DEBUG_MODE != 1
+#if GAME_DEBUG_NO_DAMAGE_MODE != 1
 	for (int i = 0; i < damage; i++)
 	{
 		mHp--;

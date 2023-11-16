@@ -17,11 +17,12 @@
 #include "RushSequence.h"
 #include "RelaxSequence.h"
 
+#include "SpawnEnemy.h"
+
 MetaAI::MetaAI()
-	:mCreateAsteroidInterval(MAX_CREATE_ASTEROID_INTERVAL),
-	mState(PLAYER_EMOTION_STATE::INCREASE_ENEMY),
-	mCreateAsteroidIntervalStep(MAX_CREATE_ASTEROID_INTERVAL),
-	mSequence(nullptr)
+	:mState(PLAYER_EMOTION_STATE::INCREASE_ENEMY),
+	mSequence(nullptr),
+	mSpawnEnemy(nullptr)
 {
 	
 }
@@ -33,6 +34,9 @@ MetaAI::~MetaAI()
 
 void MetaAI::Initialize(Game* game)
 {
+	mSpawnEnemy = new SpawnEnemy();
+	mSpawnEnemy->Initialize(game);
+
 	mSequence = new IncreaseEnemySequence();
 	mSequence->Enter(game);
 }
@@ -44,7 +48,7 @@ void MetaAI::Update(float deltaTime, Game* game)
 		return;
 	}
 
-	if (mSequence->Execute(deltaTime, game))
+	if (mSequence->Execute(deltaTime, game, mSpawnEnemy))
 	{
 		mState = mSequence->Exit(game);
 

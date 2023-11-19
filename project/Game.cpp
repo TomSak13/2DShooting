@@ -193,12 +193,12 @@ void Game::RemoveAsteroid(Asteroid* ast)
 	}
 }
 
-void Game::AddEnemyShip(class EnemyShip* enemyShip)
+void Game::AddEnemyShip(EnemyShip* enemyShip)
 {
 	mEnemyShips.emplace_back(enemyShip);
 }
 
-void Game::RemoveEnemyShip(class EnemyShip* enemyShip)
+void Game::RemoveEnemyShip(EnemyShip* enemyShip)
 {
 	auto iter = std::find(mEnemyShips.begin(),
 		mEnemyShips.end(), enemyShip);

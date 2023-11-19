@@ -45,8 +45,6 @@ bool RelaxSequence::Execute(float deltaTime, Game* game, SpawnEnemy* spawnEnemy)
 	if (asteroidCount <= mMaxAsteroidNum)
 	{
 		spawnEnemy->SpawnAsteroid(game);
-
-		mMaxAsteroidNum--;
 	}
 
 	/* state check */

@@ -37,6 +37,14 @@ void MetaAI::Initialize(Game* game)
 	mSpawnEnemy = new SpawnEnemy();
 	mSpawnEnemy->Initialize(game);
 
+	std::vector<Vector2*> respawnPos;
+	for (float i = (-1 * FIELD_WIDTH); i < FIELD_WIDTH; i += INTERVAL_RESPAWN_POSITION)
+	{
+		Vector2* spawnPos = new Vector2(i, FIELD_LENGTH);
+		respawnPos.push_back(spawnPos);
+	}
+	mSpawnEnemy->AddRespawnPlace(respawnPos);
+
 	mSequence = new IncreaseEnemySequence();
 	mSequence->Enter(game);
 }

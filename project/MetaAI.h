@@ -22,6 +22,8 @@
 #define INCREASE_CREATE_ASTEROID_STEP (0.01f) 
 #define MIN_CREATE_ASTEROID_INTERVAL (0.5f)
 
+#define INTERVAL_RESPAWN_POSITION (50)
+
 class MetaAI
 {
 public:

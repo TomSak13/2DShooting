@@ -21,6 +21,8 @@ private:
 	bool IsSpawnTime(float deltaTime);
 	void CalcNextSpawnTime();
 	int mMaxAsteroidNum;
+
 	float mCreateAsteroidInterval;
+	float mCreateAsteroidIntervalStep;
 };
 

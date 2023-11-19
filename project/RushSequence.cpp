@@ -14,8 +14,6 @@
 
 #include "EnemyShip.h"
 
-#define DESTROY_ENEMY_COUNT_CHANGE_STATE  (5)
-
 RushSequence::RushSequence()
 	: mCreateInterval(0)
 {

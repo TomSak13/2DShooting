@@ -24,6 +24,8 @@
 
 #define INTERVAL_RESPAWN_POSITION (50)
 
+#define DESTROY_ENEMY_COUNT_CHANGE_STATE  (5)
+
 class MetaAI
 {
 public:

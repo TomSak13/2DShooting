@@ -14,7 +14,8 @@
 
 RelaxSequence::RelaxSequence()
 	: mMaxAsteroidNum(0),
-	mCreateAsteroidInterval(0)
+	mCreateAsteroidInterval(0),
+	mCreateAsteroidIntervalStep(0)
 {
 
 }
@@ -28,6 +29,7 @@ void RelaxSequence::Enter(Game* game)
 {
 	mMaxAsteroidNum = MAX_ASTEROID_NUM;
 	mCreateAsteroidInterval = MAX_CREATE_ASTEROID_INTERVAL / 2;
+	mCreateAsteroidIntervalStep = MAX_CREATE_ASTEROID_INTERVAL / 2;
 }
 
 bool RelaxSequence::Execute(float deltaTime, Game* game, SpawnEnemy* spawnEnemy)
@@ -48,7 +50,7 @@ bool RelaxSequence::Execute(float deltaTime, Game* game, SpawnEnemy* spawnEnemy)
 	}
 
 	/* state check */
-	if (mCreateAsteroidInterval >= MAX_CREATE_ASTEROID_INTERVAL)
+	if (mCreateAsteroidIntervalStep >= MAX_CREATE_ASTEROID_INTERVAL)
 	{
 		return true;
 	}
@@ -75,9 +77,11 @@ bool RelaxSequence::IsSpawnTime(float deltaTime)
 
 void RelaxSequence::CalcNextSpawnTime()
 {
-	mCreateAsteroidInterval += INCREASE_CREATE_ASTEROID_STEP;
-	if (mCreateAsteroidInterval >= MAX_CREATE_ASTEROID_INTERVAL)
+	mCreateAsteroidInterval = mCreateAsteroidIntervalStep;
+	mCreateAsteroidIntervalStep += INCREASE_CREATE_ASTEROID_STEP;
+
+	if (mCreateAsteroidIntervalStep >= MAX_CREATE_ASTEROID_INTERVAL)
 	{
-		mCreateAsteroidInterval = MAX_CREATE_ASTEROID_INTERVAL;
+		mCreateAsteroidIntervalStep = MAX_CREATE_ASTEROID_INTERVAL;
 	}
 }

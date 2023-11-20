@@ -10,7 +10,7 @@
 #include "Collision.h"
 #include "Laser.h"
 
-class LaserCollision : Collision
+class LaserCollision : public Collision
 {
 public:
 	LaserCollision(class Game* game, Laser* laser);

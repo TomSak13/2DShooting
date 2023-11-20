@@ -8,17 +8,16 @@
 #pragma once
 
 #include "Collision.h"
-#include "Asteroid.h"
 
-class AsteroidCollision : Collision
+class AsteroidCollision : public Collision
 {
 public:
-	AsteroidCollision(class Game* game, Asteroid* asteroid);
+	AsteroidCollision(class Game* game, class Asteroid* asteroid);
 	~AsteroidCollision();
 
 	void RemoveCollision(class Game* game);
 
 	bool HandleCollision(class Game* game) override; /* è’ìÀèàóù */
 private:
-	Asteroid* mCollideAsteroid;
+	class Asteroid* mCollideAsteroid;
 };

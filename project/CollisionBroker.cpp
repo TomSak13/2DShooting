@@ -5,6 +5,7 @@
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
 #include "CollisionBroker.h"
+#include "Collision.h"
 #include "Game.h"
 
 CollisionBroker::CollisionBroker()

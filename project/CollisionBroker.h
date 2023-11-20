@@ -7,8 +7,6 @@
 
 #pragma once
 #include <vector>
-#include "Collision.h"
-#include "Game.h"
 
 class CollisionBroker
 {
@@ -16,10 +14,10 @@ public:
 	CollisionBroker();
 	~CollisionBroker();
 
-	void AddCollision(Collision* collision);
-	void RemoveCollision(Collision* collision);
+	void AddCollision(class Collision* collision);
+	void RemoveCollision(class Collision* collision);
 
-	void HandleCollision(Game* game);
+	void HandleCollision(class Game* game);
 
 private:
 	std::vector<Collision*> mCollisionStack;

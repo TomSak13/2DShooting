@@ -3,7 +3,7 @@
 
 - 衝突処理に関しては、衝突処理を行うオブジェクトに対応するCollisionクラスを継承したクラスを作成して対応します。シーケンスとしては下記のようになります。
 
-![シーケンス図](/img/collision.png)
+![シーケンス図](img/collision.png)
 
 - 初期化時は、ゲーム内のオブジェクトに該当するActorクラスにて、衝突処理の判定を行うCircleComponentクラスと、Collisionクラスを生成します。
   - 例えば、ゲーム内の隕石であるasteroidクラスでは、AsteroidCollisionクラスを作成し、このAsteroidCollisionクラスを、衝突処理を管理するCollisionBrokerクラスが持つvector型のメンバ変数に格納します。
